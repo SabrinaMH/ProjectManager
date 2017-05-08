@@ -1,6 +1,6 @@
 using System;
 
-namespace ProjectManager.ViewProjectsFeature
+namespace ProjectManager.Domain
 {
     public class TaskState
     {

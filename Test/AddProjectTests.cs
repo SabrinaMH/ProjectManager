@@ -6,11 +6,12 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 using ProjectManager;
-using ProjectManager.ViewProjectsFeature;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using FluentAssertions;
+using ProjectManager.API;
+using ProjectManager.Features.ViewProjectList;
 
 namespace Test
 {

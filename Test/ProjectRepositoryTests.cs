@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
+using ProjectManager.Domain;
 using ProjectManager.Infrastructure;
-using ProjectManager.ViewProjectsFeature;
+using ProjectManager.Persistence;
 
 namespace Test
 {

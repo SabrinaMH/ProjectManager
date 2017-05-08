@@ -3,7 +3,7 @@ using System.Configuration;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace ProjectManager.ViewProjectsFeature
+namespace ProjectManager.Features.ViewProjectList
 {
     public class ProjectQueryService
     {

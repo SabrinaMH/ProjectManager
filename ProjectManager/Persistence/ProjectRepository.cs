@@ -3,9 +3,10 @@ using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ProjectManager.Domain;
 using ProjectManager.Infrastructure;
 
-namespace ProjectManager.ViewProjectsFeature
+namespace ProjectManager.Persistence
 {
     public class ProjectRepository
     {

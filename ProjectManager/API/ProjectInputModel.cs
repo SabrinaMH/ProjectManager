@@ -1,4 +1,4 @@
-﻿namespace ProjectManager.ViewProjectsFeature
+﻿namespace ProjectManager.API
 {
     public class ProjectInputModel
     {

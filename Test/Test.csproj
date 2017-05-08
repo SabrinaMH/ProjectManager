@@ -114,7 +114,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NewProjectManager\ProjectManager.csproj">
+    <ProjectReference Include="..\ProjectManager\ProjectManager.csproj">
       <Project>{B80F2521-3B2D-4D90-9241-5366FC8BB811}</Project>
       <Name>ProjectManager</Name>
     </ProjectReference>

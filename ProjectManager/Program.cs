@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.Owin.Hosting;
-using ProjectManager;
 
-namespace NewProjectManager
+namespace ProjectManager
 {
     static class Program
     {

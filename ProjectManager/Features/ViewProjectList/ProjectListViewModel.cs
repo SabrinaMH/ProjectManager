@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ProjectManager.ViewProjectsFeature
+namespace ProjectManager.Features.ViewProjectList
 {
     public class ProjectListViewModel
     {

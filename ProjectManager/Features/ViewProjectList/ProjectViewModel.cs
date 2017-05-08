@@ -1,6 +1,6 @@
 using System;
 
-namespace ProjectManager.ViewProjectsFeature
+namespace ProjectManager.Features.ViewProjectList
 {
     public class ProjectViewModel
     {

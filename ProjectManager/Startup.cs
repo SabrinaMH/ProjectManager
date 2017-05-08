@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
+using Microsoft.Owin.FileSystems;
+using Microsoft.Owin.StaticFiles;
 using Owin;
-using ProjectManager.Features.AddProject;
+using ProjectManager.API;
 using ProjectManager.Infrastructure;
-using ProjectManager.ViewProjectsFeature;
 
 namespace ProjectManager
 {
@@ -19,6 +21,16 @@ namespace ProjectManager
             config.MapHttpAttributeRoutes();
             config.Services.Replace(typeof(IHttpControllerActivator), new CompositionRoot());
             app.UseWebApi(config);
+
+            const string rootFolder = ".";
+            var fileSystem = new PhysicalFileSystem(rootFolder);
+            var options = new FileServerOptions
+            {
+                EnableDefaultFiles = true,
+                FileSystem = fileSystem,
+            };
+            options.DefaultFilesOptions.DefaultFileNames = new List<string> {"index.html"};
+            app.UseFileServer(options);
         }
     }
 

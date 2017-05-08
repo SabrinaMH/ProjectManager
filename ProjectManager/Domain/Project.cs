@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using ProjectManager.Features.AddProject;
 using ProjectManager.Infrastructure;
 
-namespace ProjectManager.ViewProjectsFeature
+namespace ProjectManager.Domain
 {
     public class Project
     {

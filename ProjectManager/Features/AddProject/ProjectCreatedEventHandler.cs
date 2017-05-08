@@ -2,10 +2,9 @@
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ProjectManager.Features.AddProject;
-using ProjectManager.ViewProjectsFeature;
+using ProjectManager.Features.ViewProjectList;
 
-namespace ProjectManager
+namespace ProjectManager.Features.AddProject
 {
     public class ProjectAddedEventHandler
     {
