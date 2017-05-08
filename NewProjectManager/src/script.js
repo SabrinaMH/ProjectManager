@@ -27,3 +27,7 @@ function populateProjectList(list) {
         );
     });
 }
+
+function showCreateProjectForm() {
+    document.getElementById("projectForm").style.display = "block";
+}

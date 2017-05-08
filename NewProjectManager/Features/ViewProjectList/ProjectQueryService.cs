@@ -7,7 +7,7 @@ namespace ProjectManager.ViewProjectsFeature
 {
     public class ProjectQueryService
     {
-        private string _storageFolder;
+        private readonly string _storageFolder;
 
         public ProjectQueryService()
         {
