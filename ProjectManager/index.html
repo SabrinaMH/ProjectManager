@@ -10,9 +10,17 @@
         <h1>Project Manager</h1>
     </header>
     <section id="projectList"></section>
-    <section id="taskView"></section>
-
-
+    <section id="taskView">
+        <table id="taskTable">
+            <tr>
+                <th>Title</th>
+                <th>Deadline</th>
+                <th>Done</th>
+                <th>Has Note</th>
+                <th>Priority</th>
+            </tr>
+        </table>
+    </section>
     <form action="/project" id="addProjectForm">
         <div>
             <label for="title">Title:</label>

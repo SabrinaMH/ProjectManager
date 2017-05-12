@@ -8,7 +8,9 @@ namespace ProjectManager.Domain
 {
     public class Task
     {
-        public Guid Id { get { return State.Id; } }
+        public Guid Id => State.Id;
+        public Guid ProjectId => State.ProjectId;
+
         private List<Event> _events = new List<Event>();
         public TaskState State { get; }
         public ReadOnlyCollection<Event> Events => _events.AsReadOnly();

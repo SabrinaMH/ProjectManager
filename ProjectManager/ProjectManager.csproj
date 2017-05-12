@@ -97,7 +97,7 @@
     <Compile Include="Features\ViewProjectList\GetProjectsQuery.cs" />
     <Compile Include="Features\ViewProjectList\ProjectQueryService.cs" />
     <Compile Include="Features\ViewProjectList\ProjectViewModel.cs" />
-    <Compile Include="Features\ViewTaskList\GetTasksQuery.cs" />
+    <Compile Include="Features\ViewTaskList\GetTasksForProjectQuery.cs" />
     <Compile Include="Features\ViewTaskList\TaskViewModel.cs" />
     <Compile Include="Features\ViewTaskList\TaskQueryService.cs" />
     <Compile Include="Infrastructure\Event.cs" />

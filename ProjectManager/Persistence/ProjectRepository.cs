@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ProjectManager.Domain;
@@ -23,12 +24,14 @@ namespace ProjectManager.Persistence
                 Directory.CreateDirectory(_storageFolder);
             }
         }
+
         public List<Project> Get()
         {
             var projects = new List<Project>();
-            foreach (var file in Directory.GetFiles(_storageFolder, "project-*"))
+            foreach (var directory in Directory.GetDirectories(_storageFolder, "project-*"))
             {
-                var fileContent = File.ReadAllText(file);
+                var fileName = directory.Substring(directory.LastIndexOf('/') + 1);
+                var fileContent = File.ReadAllText(Path.Combine(directory, fileName + ".json"));
                 var projectState = JsonConvert.DeserializeObject<ProjectState>(fileContent);
                 projects.Add(new Project(projectState));
             }
@@ -38,8 +41,10 @@ namespace ProjectManager.Persistence
         public async Task SaveAsync(Project project)
         {
             var serializedProject = JsonConvert.SerializeObject(project.State);
-            var fileName = string.Concat("project-", project.Id, ".json");
-            var path = Path.Combine(_storageFolder, fileName);
+            var fileName = string.Concat("project-", project.Id);
+            string projectFolder = Path.Combine(_storageFolder, fileName);
+            Directory.CreateDirectory(projectFolder);
+            var path = Path.Combine(projectFolder, fileName + ".json");
             File.WriteAllText(path, serializedProject);
             foreach (var @event in project.Events)
             {

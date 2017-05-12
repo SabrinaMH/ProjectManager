@@ -3,27 +3,25 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using ProjectManager.Features.ViewProjectList;
 using ProjectManager.Features.ViewTaskList;
 using ProjectManager.Persistence;
 
 namespace ProjectManager.API
 {
-    [RoutePrefix("task")]
     public class TaskController : ApiController
     {
         private TaskRepository _taskRepository;
 
-        [Route("")]
-        public HttpResponseMessage Get()
+        [Route("project/{projectId}")]
+        public HttpResponseMessage Get(Guid projectId)
         {
             var projectQueryService = new TaskQueryService();
-            var getProjectsQuery = new GetTasksQuery();
-            var projects = projectQueryService.Execute(getProjectsQuery);
+            var query = new GetTasksForProjectQuery(projectId);
+            var projects = projectQueryService.Execute(query);
             return Request.CreateResponse(HttpStatusCode.OK, projects);
         }
 
-        [Route("")]
+        [Route("task")]
         public async Task<HttpResponseMessage> Post([FromBody] TaskInputModel model)
         {
             var id = Guid.NewGuid();

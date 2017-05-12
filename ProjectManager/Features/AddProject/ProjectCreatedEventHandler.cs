@@ -19,8 +19,8 @@ namespace ProjectManager.Features.AddProject
         {
             var projectViewModel = new ProjectViewModel(@event.Id, @event.Title, @event.Deadline);
             var serializedViewModel = JsonConvert.SerializeObject(projectViewModel);
-            var fileName = string.Concat("projectViewModel-", @event.Id, ".json");
-            var path = Path.Combine(_storageFolder, fileName);
+            var fileName = string.Concat("projectViewModel-", @event.Id + ".json");
+            var path = Path.Combine(_storageFolder, "project-" + @event.Id, fileName + ".json");
             File.WriteAllText(path, serializedViewModel);
         }
     }

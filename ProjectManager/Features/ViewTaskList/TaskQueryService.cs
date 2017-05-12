@@ -14,10 +14,11 @@ namespace ProjectManager.Features.ViewTaskList
             _storageFolder = ConfigurationManager.AppSettings["storage.folder"];
         }
 
-        public List<TaskViewModel> Execute(GetTasksQuery query)
+        public List<TaskViewModel> Execute(GetTasksForProjectQuery query)
         {
             var viewModels = new List<TaskViewModel>();
-            foreach (var file in Directory.GetFiles(_storageFolder, "taskViewModel-*"))
+            string projectFolder = Path.Combine(_storageFolder, "project-" + query.ProjectId);
+            foreach (var file in Directory.GetFiles(projectFolder, "taskViewModel-*"))
             {
                 var fileContent = File.ReadAllText(file);
                 var viewModel = JsonConvert.DeserializeObject<TaskViewModel>(fileContent);

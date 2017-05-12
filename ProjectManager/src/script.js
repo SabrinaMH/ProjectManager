@@ -37,7 +37,7 @@ function populateProjectList(list) {
     list.forEach(function (title, index) {
         ul.append(
             $(document.createElement('li')).append(
-                $(document.createElement('a')).text(title).attr('href', 'project')
+                $(document.createElement('a')).text(title).attr('href', 'task')
             )
         );
     });
@@ -75,3 +75,5 @@ $('#addProjectForm').submit(function (e) {
 });
 
 getProjectList();
+
+getTasksForProject()
