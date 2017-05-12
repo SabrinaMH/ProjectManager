@@ -13,13 +13,13 @@ namespace ProjectManager.Domain
         public ProjectState State { get; }
         public ReadOnlyCollection<Event> Events => _events.AsReadOnly();
 
-        public Project(Guid id, string title)
+        public Project(Guid id, string title, DateTime? deadline)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException(nameof(title));
             
             State = new ProjectState(id, title);
-            var projectCreated = new ProjectCreated(id, title);
+            var projectCreated = new ProjectCreated(id, title, deadline);
             _events.Add(projectCreated);
         }
 

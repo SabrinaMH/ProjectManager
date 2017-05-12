@@ -29,11 +29,11 @@ namespace Test
         }
 
         [Test]
-        public async Task Can_Serialize_And_Then_Deserialize_ProjectStates()
+        public async System.Threading.Tasks.Task Can_Serialize_And_Then_Deserialize_ProjectStates()
         {
             var fixture = new Fixture();
             var project = fixture.Create<Project>();
-            await _projectRepository.Save(project);
+            await _projectRepository.SaveAsync(project);
 
             var projects = _projectRepository.Get();
             projects.Should().ContainSingle(x => x.Equals(project));

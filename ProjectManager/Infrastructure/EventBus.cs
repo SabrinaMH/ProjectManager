@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ProjectManager.Features.AddProject;
+using ProjectManager.Features.AddTask;
 
 namespace ProjectManager.Infrastructure
 {
@@ -20,7 +21,8 @@ namespace ProjectManager.Infrastructure
 
         public EventBus()
         {
-            RegisterHandler<ProjectCreated>(@event => new ProjectAddedEventHandler().Handle(@event));
+            RegisterHandler<ProjectCreated>(@event => new ProjectCreatedEventHandler().Handle(@event));
+            RegisterHandler<TaskCreated>(@event => new TaskCreatedEventHandler().Handle(@event));
         }
 
         public async Task PublishAsync<T>(T @event) where T : Event

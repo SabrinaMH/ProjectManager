@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
+using ProjectManager.API;
 
 namespace ProjectManager.Features.ViewProjectList
 {
@@ -24,6 +26,14 @@ namespace ProjectManager.Features.ViewProjectList
                 viewModels.Add(viewModel);
             }
             return viewModels;
+        }
+
+        public ProjectViewModel Execute(GetProjectByIdQuery query)
+        {
+            var file = Directory.GetFiles(_storageFolder, "projectViewModel-" + query.Id + ".json").First();
+            var fileContent = File.ReadAllText(file);
+            var viewModel = JsonConvert.DeserializeObject<ProjectViewModel>(fileContent);
+            return viewModel;
         }
     }
 }

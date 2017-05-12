@@ -1,27 +1,37 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using ProjectManager.Features.AddTask;
+using ProjectManager.Infrastructure;
 
 namespace ProjectManager.Domain
 {
-    public class TaskState
+    public class Task
     {
-        public string Title { get; }
-        public DateTime Deadline { get; }
-        public bool IsDone { get; }
-        public bool HasNote { get; }
-        public string Priority { get; }
+        public Guid Id { get { return State.Id; } }
+        private List<Event> _events = new List<Event>();
+        public TaskState State { get; }
+        public ReadOnlyCollection<Event> Events => _events.AsReadOnly();
 
-        public TaskState(string title, DateTime deadline, bool isDone, bool hasNote, string priority)
+        public Task(Guid id, Guid projectId, string title, string priority, DateTime? deadline)
         {
-            Title = title;
-            Deadline = deadline;
-            IsDone = isDone;
-            HasNote = hasNote;
-            Priority = priority;
+            if (string.IsNullOrWhiteSpace(title))
+                throw new ArgumentException(nameof(title));
+
+            State = new TaskState(id, projectId, title, priority, deadline);
+            var taskCreated = new TaskCreated(id, projectId, title, priority, deadline);
+            _events.Add(taskCreated);
         }
 
-        protected bool Equals(TaskState other)
+        public Task(TaskState state)
         {
-            return string.Equals(Title, other.Title) && Deadline.Equals(other.Deadline) && IsDone == other.IsDone && HasNote == other.HasNote && string.Equals(Priority, other.Priority);
+            if (state == null) throw new ArgumentNullException(nameof(state));
+            State = state;
+        }
+
+        protected bool Equals(Task other)
+        {
+            return Id.Equals(other.Id);
         }
 
         public override bool Equals(object obj)
@@ -29,20 +39,32 @@ namespace ProjectManager.Domain
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((TaskState) obj);
+            return Equals((Project)obj);
         }
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashCode = (Title != null ? Title.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ Deadline.GetHashCode();
-                hashCode = (hashCode * 397) ^ IsDone.GetHashCode();
-                hashCode = (hashCode * 397) ^ HasNote.GetHashCode();
-                hashCode = (hashCode * 397) ^ (Priority != null ? Priority.GetHashCode() : 0);
-                return hashCode;
-            }
+            return Id.GetHashCode();
+        }
+    }
+
+    public class TaskState
+    {
+        public Guid Id { get; }
+        public Guid ProjectId { get; }
+        public string Title { get; }
+        public DateTime? Deadline { get; }
+        public bool IsDone { get; }
+        public bool HasNote { get; }
+        public string Priority { get; }
+
+        public TaskState(Guid id, Guid projectId, string title, string priority, DateTime? deadline)
+        {
+            Id = id;
+            ProjectId = projectId;
+            Title = title;
+            Deadline = deadline;
+            Priority = priority;
         }
     }
 }

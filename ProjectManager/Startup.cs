@@ -4,12 +4,15 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
+using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 using Owin;
+using ProjectManager;
 using ProjectManager.API;
 using ProjectManager.Infrastructure;
 
+[assembly: OwinStartup(typeof(Startup))]
 namespace ProjectManager
 {
     public class Startup
@@ -20,6 +23,8 @@ namespace ProjectManager
             HttpConfiguration config = new HttpConfiguration();
             config.MapHttpAttributeRoutes();
             config.Services.Replace(typeof(IHttpControllerActivator), new CompositionRoot());
+            
+
             app.UseWebApi(config);
 
             const string rootFolder = ".";

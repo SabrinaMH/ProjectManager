@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ProjectManager.Domain;
 using ProjectManager.Infrastructure;
+using Task = System.Threading.Tasks.Task;
 
 namespace ProjectManager.Persistence
 {
@@ -34,7 +35,7 @@ namespace ProjectManager.Persistence
             return projects;
         }
 
-        public async Task Save(Project project)
+        public async Task SaveAsync(Project project)
         {
             var serializedProject = JsonConvert.SerializeObject(project.State);
             var fileName = string.Concat("project-", project.Id, ".json");

@@ -36,6 +36,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
@@ -63,6 +64,10 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
@@ -78,6 +83,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\TaskController.cs" />
+    <Compile Include="API\TaskInputModel.cs" />
+    <Compile Include="Features\AddTask\TaskCreated.cs" />
+    <Compile Include="Features\AddTask\TaskCreatedEventHandler.cs" />
+    <Compile Include="Features\ViewProjectList\GetProjectByIdQuery.cs" />
     <Compile Include="API\ProjectController.cs" />
     <Compile Include="API\ProjectInputModel.cs" />
     <Compile Include="Domain\Project.cs" />
@@ -85,27 +95,36 @@
     <Compile Include="Features\AddProject\ProjectCreated.cs" />
     <Compile Include="Features\AddProject\ProjectCreatedEventHandler.cs" />
     <Compile Include="Features\ViewProjectList\GetProjectsQuery.cs" />
-    <Compile Include="Features\ViewProjectList\ProjectListViewModel.cs" />
     <Compile Include="Features\ViewProjectList\ProjectQueryService.cs" />
     <Compile Include="Features\ViewProjectList\ProjectViewModel.cs" />
+    <Compile Include="Features\ViewTaskList\GetTasksQuery.cs" />
+    <Compile Include="Features\ViewTaskList\TaskViewModel.cs" />
+    <Compile Include="Features\ViewTaskList\TaskQueryService.cs" />
     <Compile Include="Infrastructure\Event.cs" />
     <Compile Include="Infrastructure\EventBus.cs" />
+    <Compile Include="Persistence\TaskRepository.cs" />
     <Compile Include="Persistence\ProjectRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib\jquery.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="src\script.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

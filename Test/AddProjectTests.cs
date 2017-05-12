@@ -42,18 +42,31 @@ namespace Test
         }
 
         [Test]
-        public async Task When_Adding_A_Project_Then_It_Appears_In_ProjectList()
+        public async Task When_Adding_A_Project_Then_It_Appears_In_The_Project_List()
         {
             var projectInputModel = _fixture.Create<ProjectInputModel>();
             var postProjectResponse = await _httpClient.PostAsJsonAsync(_projectEndpoint, projectInputModel);
             var postProjectResponseContent = await postProjectResponse.Content.ReadAsStringAsync();
             var projectId = JsonConvert.DeserializeObject<Guid>(postProjectResponseContent);
 
-            var getProjectResponse = await _httpClient.GetAsync(_projectEndpoint);
-            var getProjectResponseContent = await getProjectResponse.Content.ReadAsStringAsync();
-            var projectViewModels = JsonConvert.DeserializeObject<List<ProjectViewModel>>(getProjectResponseContent);
+            var getProjectsResponse = await _httpClient.GetAsync(_projectEndpoint);
+            var getProjectsResponseContent = await getProjectsResponse.Content.ReadAsStringAsync();
+            var projectViewModels = JsonConvert.DeserializeObject<List<ProjectViewModel>>(getProjectsResponseContent);
             projectViewModels.Should().Contain(x => x.Id.Equals(projectId));
         }
 
+        [Test]
+        public async Task When_Adding_A_Project_With_A_Deadline_Then_It_Appears_In_The_Project_List()
+        {
+            var projectInputModel = _fixture.Create<ProjectInputModel>();
+            var postProjectResponse = await _httpClient.PostAsJsonAsync(_projectEndpoint, projectInputModel);
+            var postProjectResponseContent = await postProjectResponse.Content.ReadAsStringAsync();
+            var projectId = JsonConvert.DeserializeObject<Guid>(postProjectResponseContent);
+
+            var getProjectsResponse = await _httpClient.GetAsync(_projectEndpoint);
+            var getProjectsResponseContent = await getProjectsResponse.Content.ReadAsStringAsync();
+            var projectViewModels = JsonConvert.DeserializeObject<List<ProjectViewModel>>(getProjectsResponseContent);
+            projectViewModels.Should().Contain(x => x.Id.Equals(projectId) && x.Deadline.Equals(projectInputModel.Deadline));
+        }
     }
 }
