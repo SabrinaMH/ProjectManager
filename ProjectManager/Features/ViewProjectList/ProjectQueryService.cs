@@ -3,7 +3,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using ProjectManager.API;
 
 namespace ProjectManager.Features.ViewProjectList
 {
@@ -19,9 +18,10 @@ namespace ProjectManager.Features.ViewProjectList
         public List<ProjectViewModel> Execute(GetProjectsQuery query)
         {
             var viewModels = new List<ProjectViewModel>();
-            foreach (var file in Directory.GetFiles(_storageFolder, "projectViewModel-*"))
+            foreach (var directory in Directory.GetDirectories(_storageFolder, "project-*"))
             {
-                var fileContent = File.ReadAllText(file);
+                var fileName = directory.Substring(directory.LastIndexOf('\\') + 1);
+                var fileContent = File.ReadAllText(Path.Combine(directory, fileName + ".json"));
                 var viewModel = JsonConvert.DeserializeObject<ProjectViewModel>(fileContent);
                 viewModels.Add(viewModel);
             }
@@ -30,7 +30,8 @@ namespace ProjectManager.Features.ViewProjectList
 
         public ProjectViewModel Execute(GetProjectByIdQuery query)
         {
-            var file = Directory.GetFiles(_storageFolder, "projectViewModel-" + query.Id + ".json").First();
+            var directory = Path.Combine(_storageFolder, "project-" + query.Id);
+            var file = Directory.GetFiles(directory, "projectViewModel-" + query.Id + ".json").First();
             var fileContent = File.ReadAllText(file);
             var viewModel = JsonConvert.DeserializeObject<ProjectViewModel>(fileContent);
             return viewModel;

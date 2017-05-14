@@ -1,0 +1,16 @@
+﻿#taskContextMenu {
+    display: none;
+    position: absolute;
+    border: 1px solid black;
+    background: #fff;
+}
+
+#taskContextMenu li {
+    padding: 3px;
+    margin: 0;
+    cursor: pointer;
+}
+
+#taskContextMenu li:hover {
+    background-color: #eee;
+}

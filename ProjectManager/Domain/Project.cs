@@ -18,7 +18,7 @@ namespace ProjectManager.Domain
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException(nameof(title));
             
-            State = new ProjectState(id, title);
+            State = new ProjectState(id, title, deadline);
             var projectCreated = new ProjectCreated(id, title, deadline);
             _events.Add(projectCreated);
         }
@@ -52,11 +52,13 @@ namespace ProjectManager.Domain
     {
         public Guid Id { get; }
         public string Title { get; }
+        public DateTime? Deadline { get; }
 
-        public ProjectState(Guid id, string title)
+        public ProjectState(Guid id, string title, DateTime? deadline)
         {
             Id = id;
             Title = title;
+            Deadline = deadline;
         }
     }
 }

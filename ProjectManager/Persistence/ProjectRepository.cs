@@ -30,7 +30,7 @@ namespace ProjectManager.Persistence
             var projects = new List<Project>();
             foreach (var directory in Directory.GetDirectories(_storageFolder, "project-*"))
             {
-                var fileName = directory.Substring(directory.LastIndexOf('/') + 1);
+                var fileName = directory.Substring(directory.LastIndexOf('\\') + 1);
                 var fileContent = File.ReadAllText(Path.Combine(directory, fileName + ".json"));
                 var projectState = JsonConvert.DeserializeObject<ProjectState>(fileContent);
                 projects.Add(new Project(projectState));

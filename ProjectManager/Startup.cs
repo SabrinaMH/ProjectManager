@@ -11,6 +11,7 @@ using Owin;
 using ProjectManager;
 using ProjectManager.API;
 using ProjectManager.Infrastructure;
+using ProjectManager.Persistence;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace ProjectManager
@@ -52,7 +53,13 @@ namespace ProjectManager
         {
             if (controllerType == typeof(ProjectController))
             {
-                return new ProjectController(_eventBus);
+                var projectRepository = new ProjectRepository(_eventBus);
+                return new ProjectController(projectRepository);
+            }
+            else if (controllerType == typeof(TaskController))
+            {
+                var taskRepository = new TaskRepository(_eventBus);
+                return new TaskController(taskRepository);
             }
 
             throw new ArgumentException("Unexpected type!", nameof(controllerType));

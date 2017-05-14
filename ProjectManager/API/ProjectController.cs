@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using ProjectManager.Domain;
 using ProjectManager.Features.ViewProjectList;
-using ProjectManager.Infrastructure;
 using ProjectManager.Persistence;
 
 namespace ProjectManager.API
@@ -15,9 +14,9 @@ namespace ProjectManager.API
     {
         private ProjectRepository _projectRepository;
 
-        public ProjectController(EventBus eventBus)
+        public ProjectController(ProjectRepository projectRepository)
         {
-            _projectRepository = new ProjectRepository(eventBus);
+            _projectRepository = projectRepository;
         }
 
         [Route("")]

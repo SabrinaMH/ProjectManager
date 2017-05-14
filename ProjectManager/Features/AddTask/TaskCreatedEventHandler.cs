@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ProjectManager.Features.ViewProjectList;
 using ProjectManager.Features.ViewTaskList;
 
 namespace ProjectManager.Features.AddTask
@@ -18,7 +17,7 @@ namespace ProjectManager.Features.AddTask
 
         public async Task Handle(TaskCreated @event)
         {
-            var taskViewModel = new TaskViewModel(@event.Id, @event.ProjectId, @event.Title, @event.Deadline, @event.Priority);
+            var taskViewModel = new TaskViewModel(@event.Id, @event.ProjectId, @event.Title, @event.Deadline, @event.Priority, false, false);
             var serializedViewModel = JsonConvert.SerializeObject(taskViewModel);
             var fileName = string.Concat("taskViewModel-", @event.Id, ".json");
             var path = Path.Combine(_storageFolder, "project-" + @event.ProjectId, fileName);

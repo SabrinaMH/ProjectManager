@@ -10,59 +10,95 @@ function get(url) {
     });
 }
 
-function getProject(id) {
-    get('project/' + id)
-        .then((viewModel) => {
-            appendToProjectList(viewModel);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-}
-
-function getProjectList() {
+function populateProjectList() {
     get('project')
-        .then((viewModels) => {
-            var projectList = [];
-            viewModels.forEach(function(viewModel) { projectList.push(viewModel.Title) });
-            populateProjectList(projectList);
+        .then((projects) => {
+            var ul = $('<ul>').appendTo($('#projectList'));
+            projects.forEach(function (project) {
+                extendDomWithProject(ul, project);
+            });
+            selectedProjectId = projects[0].Id;
+            populateTaskView(selectedProjectId);
         })
         .catch((err) => {
             console.log(err);
         });
 }
 
-function populateProjectList(list) {
-    var ul = $('<ul>').appendTo($('#projectList'));
-    list.forEach(function (title, index) {
-        ul.append(
-            $(document.createElement('li')).append(
-                $(document.createElement('a')).text(title).attr('href', 'task')
-            )
-        );
+function appendToProjectList(projectId) {
+    get('project/' + projectId)
+        .then((project) => {
+            var ul = $('#projectList ul');
+            extendDomWithProject(ul, project);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+function extendDomWithProject(ul, project) {
+    var li = $(document.createElement('li'));
+    li.text(project.Title);
+    li.click(() => 
+    {
+        if (project.Id === selectedProjectId) return; 
+        selectedProjectId = project.Id;
+        populateTaskView(project.Id);
     });
+    ul.append(li);
 }
 
-function appendToProjectList(viewModel) {
-    var ul = $('#projectList ul');
-    ul.append(
-        $(document.createElement('li')).text(viewModel.Title)
-    );
+function appendToTaskView(taskId) {
+    get('project/' + selectedProjectId + '/task/' + taskId)
+        .then((task) => {
+            extendDomWithTask(task);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
-$('#addProjectForm').submit(function (e) {
-    var title = $("#title").val().toString();
-    var deadline = $("#deadline").val();
+function extendDomWithTask(task) {
+    var taskTable = $('#taskTable tbody');
+    var tr = document.createElement('tr');
+    tr.setAttribute('data-taskId', task.Id);
+    tr.click(() => {
+        if (task.Id === selectedTaskId) return;
+        selectedTaskId = task.Id;
+        populateNote(task.Id);
+    });
+    var td = document.createElement('td');
+    td.append(document.createTextNode(task.Title));
+    tr.append(td);
+    td = document.createElement('td');
+    td.append(document.createTextNode(task.Deadline));
+    tr.append(td);
+    td = document.createElement('td');
+    td.append(document.createTextNode(task.Done));
+    tr.append(td);
+    td = document.createElement('td');
+    td.append(document.createTextNode(task.HasNote));
+    tr.append(td);
+    td = document.createElement('td');
+    td.append(document.createTextNode(task.Priority));
+    tr.append(td);
+    taskTable.append(tr);
+}
+
+$('#addProjectForm').submit(function () {
+    var title = $("#addProjectForm #title").val().toString();
+    var deadline = $("#addProjectForm #deadline").val();
     var formData = { Title: title, Deadline: deadline }
-    var formURL = $(this).attr("action");
+    var formURL = $('#addProjectForm').attr("action");
     $.ajax(
         {
             url: formURL,
             type: "POST",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(formData),
-            success: function (projectId, textStatus, jqXHR) {
-                getProject(projectId);
+            success: function (projectId) {
+                appendToProjectList(projectId);
+                selectedProjectId = projectId;
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown, jqXHR.reason);
@@ -74,6 +110,124 @@ $('#addProjectForm').submit(function (e) {
      return false;
 });
 
-getProjectList();
+$('#addTaskForm').submit(function () {
+    var title = $("#addTaskForm #title").val().toString();
+    var deadline = $("#addTaskForm #deadline").val();
+    var priority = $("#addTaskForm #priority").val();
+    var formData = { Title: title, Deadline: deadline, Priority: priority }
+    $.ajax(
+        {
+            url: 'project/' + selectedProjectId + '/task',
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(formData),
+            success: function (taskId) {
+                appendToTaskView(taskId);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown, jqXHR.reason);
+            },
+            complete: function () {
+                $("#addTaskForm")[0].reset();
+            }
+        });
+    return false;
+});
 
-getTasksForProject()
+function fillPriorityDropDown() {
+    $.ajax(
+    {
+        url: "/task/priority",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        success: function(priorities) {
+            var fragment = document.createDocumentFragment();
+            priorities.forEach(function(task) {
+                var opt = document.createElement('option');
+                opt.innerHTML = task;
+                opt.value = task;
+                fragment.append(opt);
+            });
+            var priorityDropdown = document.getElementById('priority');
+            priorityDropdown.append(fragment);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown, jqXHR.reason);
+        }
+    });
+}
+
+function populateTaskView(projectId) {
+    $('#taskTable tbody').empty();
+    get('project/' + projectId + '/task')
+        .then((tasks) => {
+            for (var i = 0; i < tasks.length; i++) {
+                extendDomWithTask(tasks[i]);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+function showContextMenuWhenRightClickingOnTask() {
+    $('#taskTable').on('contextmenu', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if ($(e.target).is('td')) {
+            selectedTaskId = e.target.parentNode.getAttribute('data-taskId');
+            $('#taskContextMenu').css({
+                top: e.pageY + 'px',
+                left: e.pageX + 'px'
+            }).show();
+        }
+        return false;
+    });
+
+    $(document).on('click',
+        function (e) {
+            if (!$(e.target).is('#taskContextMenu li'))
+                $('#taskContextMenu').hide();
+        });
+}
+
+function populateNote(taskId) {
+    get('task/' + taskId + '/note')
+        .then((note) => {
+            $('#noteTextBox').text(note.Text);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+
+//function saveNote() {
+//    $.ajax(
+//        {
+//            url: 'project/' + selectedProjectId + '/task/' + selectedTaskId + '/note',
+//            type: "POST",
+//            contentType: "application/json; charset=utf-8",
+//            success: function (priorities) {
+//                var fragment = document.createDocumentFragment();
+//                priorities.forEach(function (task) {
+//                    var opt = document.createElement('option');
+//                    opt.innerHTML = task;
+//                    opt.value = task;
+//                    fragment.append(opt);
+//                });
+//                var priorityDropdown = document.getElementById('priority');
+//                priorityDropdown.append(fragment);
+//            },
+//            error: function (jqXHR, textStatus, errorThrown) {
+//                console.log(textStatus, errorThrown, jqXHR.reason);
+//            }
+//        });
+//}
+
+var selectedProjectId;
+var selectedTaskId;
+
+fillPriorityDropDown();
+populateProjectList();
+//showContextMenuWhenRightClickingOnTask();
