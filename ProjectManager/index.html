@@ -11,7 +11,7 @@
     <header>
         <h1>Project Manager</h1>
     </header>
-<section id="projectList" style="float: left; margin:1%"><h2>Projects</h2></section>
+    <section id="projectList" style="float: left; margin:1%"><h2>Projects</h2></section>
     <section id="taskView" style="float:left; margin:1%">
         <h2>Tasks</h2>
         <table id="taskTable">
@@ -29,8 +29,10 @@
     </section>
     <section id="note" style="float:left; margin:1%">
         <h2>Note</h2>
-        <textarea id="noteTextBox" rows="4" cols="50">
-</textarea>
+        <form action="/note" id="noteForm" style="clear:left; margin:1%">
+            <textarea id="noteTextBox" rows="4" cols="50"></textarea>
+            <input type="submit" value="Save Note">
+        </form>
     </section>
     <br />
     <form action="/project" id="addProjectForm" style="clear:left; margin:1%">
@@ -43,7 +45,7 @@
         <input type="submit" value="Add Project">
     </form>
     <br />
-    <form id="addTaskForm" style="margin:1%">
+    <form action="/task" id="addTaskForm" style="margin:1%">
         <div>
             <label for="taskTitle">Title:</label>
             <input type="text" id="taskTitle" name="title" />

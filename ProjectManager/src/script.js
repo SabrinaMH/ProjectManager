@@ -79,7 +79,9 @@ function extendDomWithTask(task) {
         if (task.Id === selectedTaskId) return;
 
         var previouslySelectedTask = document.getElementsByClassName('selectedTask')[0];
-        previouslySelectedTask.classList.remove('selectedTask');
+        if (previouslySelectedTask !== undefined) {
+            previouslySelectedTask.classList.remove('selectedTask');
+        }
         tr[0].classList.add('selectedTask');
         selectedTaskId = task.Id;
         populateNote(task.Id);
@@ -135,9 +137,11 @@ $('#addTaskForm').submit(function () {
     var deadline = new Date(date + ' ' + time);
     var priority = $("#addTaskForm #priority").val();
     var formData = { ProjectId: selectedProjectId, Title: title, Deadline: deadline, Priority: priority }
+    var formURL = $('#addTaskForm').attr("action");
+
     $.ajax(
         {
-            url: '/task',
+            url: formURL,
             type: "POST",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(formData),
@@ -149,6 +153,26 @@ $('#addTaskForm').submit(function () {
             },
             complete: function () {
                 $("#addTaskForm")[0].reset();
+            }
+        });
+    return false;
+});
+
+$('#noteForm').submit(function () {
+    var text = $("#noteTextBox").val();
+    var formData = { TaskId: selectedTaskId, Text: text }
+    var formURL = $('#noteForm').attr("action");
+    $.ajax(
+        {
+            url: formURL,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(formData),
+            success: function (taskId) {
+                alert("Saved note successfully");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown, jqXHR.reason);
             }
         });
     return false;
@@ -182,6 +206,7 @@ function populateTaskView(projectId) {
     get('project/' + projectId + '/task')
         .then((tasks) => {
             if (tasks.length === 0) {
+                $('#noteTextBox').empty();
                 return;
             }
             
@@ -189,8 +214,9 @@ function populateTaskView(projectId) {
                 extendDomWithTask(tasks[i]);
             }
             
-            var firstTaskItem = document.querySelector("tr:nth-child(2)");
+            var firstTaskItem = document.querySelector("tbody > tr");
             firstTaskItem.classList.add('selectedTask');
+            populateNote(tasks[0].Id);
         })
         .catch((err) => {
             console.log(err);
@@ -219,6 +245,7 @@ function showContextMenuWhenRightClickingOnTask() {
 }
 
 function populateNote(taskId) {
+    $('#noteTextBox').empty();
     get('task/' + taskId + '/note')
         .then((note) => {
             $('#noteTextBox').text(note.Text);
@@ -227,30 +254,6 @@ function populateNote(taskId) {
             console.log(err);
         });
 }
-
-
-//function saveNote() {
-//    $.ajax(
-//        {
-//            url: 'project/' + selectedProjectId + '/task/' + selectedTaskId + '/note',
-//            type: "POST",
-//            contentType: "application/json; charset=utf-8",
-//            success: function (priorities) {
-//                var fragment = document.createDocumentFragment();
-//                priorities.forEach(function (task) {
-//                    var opt = document.createElement('option');
-//                    opt.innerHTML = task;
-//                    opt.value = task;
-//                    fragment.append(opt);
-//                });
-//                var priorityDropdown = document.getElementById('priority');
-//                priorityDropdown.append(fragment);
-//            },
-//            error: function (jqXHR, textStatus, errorThrown) {
-//                console.log(textStatus, errorThrown, jqXHR.reason);
-//            }
-//        });
-//}
 
 var selectedProjectId;
 var selectedTaskId;
