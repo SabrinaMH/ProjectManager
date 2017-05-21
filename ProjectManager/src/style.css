@@ -1,12 +1,12 @@
-﻿li {
-    cursor: pointer
-}
-
-td {
+﻿td {
     padding: 0 15px 0 15px;
 }
 
-.selectedProject {
+.clickable {
+    cursor: pointer
+}
+
+.selectedProject, .selectedTask {
     font-weight: bold;
 }
 

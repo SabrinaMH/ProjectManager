@@ -45,6 +45,7 @@ function appendToProjectList(projectId) {
 
 function extendDomWithProject(ul, project) {
     var li = $(document.createElement('li'));
+    li[0].classList.add("clickable");
     li.text(project.Title);
     li.click(() => 
     {
@@ -71,10 +72,15 @@ function appendToTaskView(taskId) {
 
 function extendDomWithTask(task) {
     var taskTable = $('#taskTable tbody');
-    var tr = document.createElement('tr');
-    tr.setAttribute('data-taskId', task.Id);
+    var tr = $(document.createElement('tr'));
+    tr[0].classList.add("clickable");
+    tr[0].setAttribute('data-taskId', task.Id);
     tr.click(() => {
         if (task.Id === selectedTaskId) return;
+
+        var previouslySelectedTask = document.getElementsByClassName('selectedTask')[0];
+        previouslySelectedTask.classList.remove('selectedTask');
+        tr[0].classList.add('selectedTask');
         selectedTaskId = task.Id;
         populateNote(task.Id);
     });
@@ -98,8 +104,8 @@ function extendDomWithTask(task) {
 }
 
 $('#addProjectForm').submit(function () {
-    var title = $("#addProjectForm #title").val().toString();
-    var deadline = $("#addProjectForm #deadline").val();
+    var title = $("#projectTitle").val().toString();
+    var deadline = $("#addProjectForm #projectDeadline").val();
     var formData = { Title: title, Deadline: deadline }
     var formURL = $('#addProjectForm').attr("action");
     $.ajax(
@@ -123,8 +129,10 @@ $('#addProjectForm').submit(function () {
 });
 
 $('#addTaskForm').submit(function () {
-    var title = $("#addTaskForm #title").val().toString();
-    var deadline = $("#addTaskForm #deadline").val();
+    var title = $("#addTaskForm #taskTitle").val().toString();
+    var date = $("#deadlineDate").val();
+    var time = $('#deadlineTime').val();
+    var deadline = new Date(date + ' ' + time);
     var priority = $("#addTaskForm #priority").val();
     var formData = { ProjectId: selectedProjectId, Title: title, Deadline: deadline, Priority: priority }
     $.ajax(
@@ -173,9 +181,16 @@ function populateTaskView(projectId) {
     $('#taskTable tbody').empty();
     get('project/' + projectId + '/task')
         .then((tasks) => {
+            if (tasks.length === 0) {
+                return;
+            }
+            
             for (var i = 0; i < tasks.length; i++) {
                 extendDomWithTask(tasks[i]);
             }
+            
+            var firstTaskItem = document.querySelector("tr:nth-child(2)");
+            firstTaskItem.classList.add('selectedTask');
         })
         .catch((err) => {
             console.log(err);
