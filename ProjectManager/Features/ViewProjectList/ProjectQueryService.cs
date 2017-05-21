@@ -29,7 +29,7 @@ namespace ProjectManager.Features.ViewProjectList
 
         public ProjectViewModel Execute(GetProjectByIdQuery query)
         {
-            var file = Directory.GetFiles(_storageFolder, "projectViewModel-" + query.Id + ".json").First();
+            var file = Directory.GetFiles(_storageFolder, "project-" + query.Id + ".json").First();
             var fileContent = File.ReadAllText(file);
             var viewModel = JsonConvert.DeserializeObject<ProjectViewModel>(fileContent);
             return viewModel;

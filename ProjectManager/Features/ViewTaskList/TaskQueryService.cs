@@ -19,7 +19,7 @@ namespace ProjectManager.Features.ViewTaskList
         public List<TaskViewModel> Execute(GetTasksForProjectQuery query)
         {
             var viewModels = new List<TaskViewModel>();
-            foreach (var file in Directory.GetFiles(_storageFolder, "taskViewModel-*"))
+            foreach (var file in Directory.GetFiles(_storageFolder, "task-*"))
             {
                 var fileContent = File.ReadAllText(file);
                 var viewModel = JsonConvert.DeserializeObject<TaskViewModel>(fileContent);
@@ -33,7 +33,7 @@ namespace ProjectManager.Features.ViewTaskList
 
         public TaskViewModel Execute(GetTaskByIdQuery query)
         {
-            string file = Path.Combine(_storageFolder, "taskViewModel-" + query.Id + ".json");
+            string file = Path.Combine(_storageFolder, "task-" + query.Id + ".json");
             string fileContent = File.ReadAllText(file);
             var viewModel = JsonConvert.DeserializeObject<TaskViewModel>(fileContent);
             return viewModel;
