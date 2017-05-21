@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using ProjectManager.Domain;
-using ProjectManager.Features.ViewProjectList;
 using ProjectManager.Features.ViewTaskList;
 using ProjectManager.Persistence;
 

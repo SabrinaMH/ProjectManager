@@ -13,10 +13,17 @@ function get(url) {
 function populateProjectList() {
     get('project')
         .then((projects) => {
+            if (projects.length === 0) {
+                return;
+            }
+
             var ul = $('<ul>').appendTo($('#projectList'));
             projects.forEach(function (project) {
                 extendDomWithProject(ul, project);
             });
+
+            var firstProjectItem = document.querySelector("ul > li");
+            firstProjectItem.classList.add('selectedProject');
             selectedProjectId = projects[0].Id;
             populateTaskView(selectedProjectId);
         })
@@ -41,7 +48,11 @@ function extendDomWithProject(ul, project) {
     li.text(project.Title);
     li.click(() => 
     {
-        if (project.Id === selectedProjectId) return; 
+        if (project.Id === selectedProjectId) return;
+
+        var previouslySelectedProject = document.getElementsByClassName('selectedProject')[0];
+        previouslySelectedProject.classList.remove('selectedProject');
+        li[0].classList.add('selectedProject');
         selectedProjectId = project.Id;
         populateTaskView(project.Id);
     });
@@ -49,7 +60,7 @@ function extendDomWithProject(ul, project) {
 }
 
 function appendToTaskView(taskId) {
-    get('project/' + selectedProjectId + '/task/' + taskId)
+    get('/task/' + taskId)
         .then((task) => {
             extendDomWithTask(task);
         })
@@ -71,7 +82,8 @@ function extendDomWithTask(task) {
     td.append(document.createTextNode(task.Title));
     tr.append(td);
     td = document.createElement('td');
-    td.append(document.createTextNode(task.Deadline));
+    var deadline = new Date(task.Deadline);
+    td.append(document.createTextNode(deadline.toString("HH:mm d/M/yyyy")));
     tr.append(td);
     td = document.createElement('td');
     td.append(document.createTextNode(task.Done));
@@ -114,10 +126,10 @@ $('#addTaskForm').submit(function () {
     var title = $("#addTaskForm #title").val().toString();
     var deadline = $("#addTaskForm #deadline").val();
     var priority = $("#addTaskForm #priority").val();
-    var formData = { Title: title, Deadline: deadline, Priority: priority }
+    var formData = { ProjectId: selectedProjectId, Title: title, Deadline: deadline, Priority: priority }
     $.ajax(
         {
-            url: 'project/' + selectedProjectId + '/task',
+            url: '/task',
             type: "POST",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(formData),

@@ -1,8 +1,13 @@
-﻿#taskContextMenu {
-    display: none;
-    position: absolute;
-    border: 1px solid black;
-    background: #fff;
+﻿li {
+    cursor: pointer
+}
+
+td {
+    padding: 0 15px 0 15px;
+}
+
+.selectedProject {
+    font-weight: bold;
 }
 
 #taskContextMenu li {
