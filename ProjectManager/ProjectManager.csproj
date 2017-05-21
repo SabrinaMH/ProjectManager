@@ -83,10 +83,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\NoteController.cs" />
     <Compile Include="API\NoteInputModel.cs" />
+    <Compile Include="Features\ViewNote\NoteQueryService.cs" />
     <Compile Include="API\TaskController.cs" />
     <Compile Include="API\TaskInputModel.cs" />
     <Compile Include="Domain\Enumeration.cs" />
+    <Compile Include="Domain\Note.cs" />
+    <Compile Include="Features\AddNote\NoteCreated.cs" />
     <Compile Include="Domain\TaskPriority.cs" />
     <Compile Include="Features\AddTask\TaskCreated.cs" />
     <Compile Include="Features\AddTask\TaskCreatedEventHandler.cs" />
@@ -100,14 +104,15 @@
     <Compile Include="Features\ViewProjectList\GetProjectsQuery.cs" />
     <Compile Include="Features\ViewProjectList\ProjectQueryService.cs" />
     <Compile Include="Features\ViewProjectList\ProjectViewModel.cs" />
-    <Compile Include="Features\ViewTaskList\GetNoteForTaskQuery.cs" />
+    <Compile Include="Features\ViewNote\GetNoteForTaskQuery.cs" />
     <Compile Include="Features\ViewTaskList\GetTaskByIdQuery.cs" />
     <Compile Include="Features\ViewTaskList\GetTasksForProjectQuery.cs" />
-    <Compile Include="Features\ViewTaskList\NoteViewModel.cs" />
+    <Compile Include="Features\ViewNote\NoteViewModel.cs" />
     <Compile Include="Features\ViewTaskList\TaskViewModel.cs" />
     <Compile Include="Features\ViewTaskList\TaskQueryService.cs" />
     <Compile Include="Infrastructure\Event.cs" />
     <Compile Include="Infrastructure\EventBus.cs" />
+    <Compile Include="Persistence\NoteRepository.cs" />
     <Compile Include="Persistence\TaskRepository.cs" />
     <Compile Include="Persistence\ProjectRepository.cs" />
     <Compile Include="Program.cs" />

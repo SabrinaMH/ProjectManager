@@ -21,6 +21,10 @@ namespace Test
             var storageFolder = ConfigurationManager.AppSettings["storage.folder"];
             if (Directory.Exists(storageFolder))
             {
+                foreach (var file in Directory.GetFiles(storageFolder))
+                {
+                    File.Delete(file);
+                }
                 Directory.Delete(storageFolder, true);
             }
             var eventBus = new EventBus();

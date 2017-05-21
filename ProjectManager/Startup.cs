@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
@@ -51,18 +52,28 @@ namespace ProjectManager
 
         public IHttpController Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
         {
+            ApiController controller;
             if (controllerType == typeof(ProjectController))
             {
                 var projectRepository = new ProjectRepository(_eventBus);
-                return new ProjectController(projectRepository);
+                controller = new ProjectController(projectRepository);
             }
             else if (controllerType == typeof(TaskController))
             {
                 var taskRepository = new TaskRepository(_eventBus);
-                return new TaskController(taskRepository);
+                controller = new TaskController(taskRepository);
+            }
+            else if (controllerType == typeof(NoteController))
+            {
+                var noteRepository = new NoteRepository(_eventBus);
+                controller = new NoteController(noteRepository);
+            }
+            else
+            {
+                throw new ArgumentException("Unexpected type!", nameof(controllerType));
             }
 
-            throw new ArgumentException("Unexpected type!", nameof(controllerType));
+            return controller;
         }
     }
 }

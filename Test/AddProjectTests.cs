@@ -27,7 +27,14 @@ namespace Test
         public void SetUp()
         {
             var storageFolder = ConfigurationManager.AppSettings["storage.folder"];
-            Directory.Delete(storageFolder, true);
+            if (Directory.Exists(storageFolder))
+            {
+                foreach (var file in Directory.GetFiles(storageFolder))
+                {
+                    File.Delete(file);
+                }
+                Directory.Delete(storageFolder, true);
+            }
 
             _webApp = WebApp.Start<Startup>("http://*:9000/");
             _projectEndpoint = "http://localhost:9000/project";

@@ -1,6 +1,6 @@
 using System;
 
-namespace ProjectManager.Features.ViewProjectList
+namespace ProjectManager.Features.ViewNote
 {
     public class GetNoteForTaskQuery
     {

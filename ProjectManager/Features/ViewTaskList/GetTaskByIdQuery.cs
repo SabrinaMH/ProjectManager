@@ -1,6 +1,6 @@
 using System;
 
-namespace ProjectManager.Features.ViewProjectList
+namespace ProjectManager.Features.ViewTaskList
 {
     public class GetTaskByIdQuery 
     {

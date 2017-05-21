@@ -39,13 +39,5 @@ namespace ProjectManager.Features.ViewTaskList
             return viewModel;
         }
 
-        public NoteViewModel Execute(GetNoteForTaskQuery query)
-        {
-            string noteFolder = Path.Combine(_storageFolder, "task-" + query.TaskId);
-            string file = Path.Combine(noteFolder, "noteViewModel.json");
-            string fileContent = File.ReadAllText(file);
-            var viewModel = JsonConvert.DeserializeObject<NoteViewModel>(fileContent);
-            return viewModel;
-        }
     }
 }
