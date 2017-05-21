@@ -14,7 +14,7 @@ namespace ProjectManager.Features.ViewNote
         }
         public NoteViewModel Execute(GetNoteForTaskQuery query)
         {
-            foreach (var file in Directory.GetFiles(_storageFolder, "noteViewModel-*"))
+            foreach (var file in Directory.GetFiles(_storageFolder, "note-*"))
             {
                 var fileContent = File.ReadAllText(file);
                 var viewModel = JsonConvert.DeserializeObject<NoteViewModel>(fileContent);

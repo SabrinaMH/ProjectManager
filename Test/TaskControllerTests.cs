@@ -19,7 +19,6 @@ namespace Test
         private IDisposable _webApp;
         private HttpClient _httpClient;
         private Fixture _fixture;
-        private string _projectEndpoint;
         private string _taskEndpoint;
 
         [SetUp]
@@ -36,7 +35,6 @@ namespace Test
             }
 
             _webApp = WebApp.Start<Startup>("http://*:9000/");
-            _projectEndpoint = "http://localhost:9000/project";
             _taskEndpoint = "http://localhost:9000/task";
             _httpClient = new HttpClient();
             _fixture = new Fixture();
@@ -61,25 +59,6 @@ namespace Test
             var getTasksResponseContent = await getTaskResponse.Content.ReadAsStringAsync();
             var taskViewModel = JsonConvert.DeserializeObject<TaskViewModel>(getTasksResponseContent);
             taskViewModel.Id.Should().Be(taskId);
-        }
-
-        [Test]
-        public async System.Threading.Tasks.Task Given_A_Task_With_A_Note_Then_The_Note_Can_Be_Fetched_Through_The_Api()
-        {
-            var taskInputModel = _fixture.Create<TaskInputModel>();
-            var postTaskResponse = await _httpClient.PostAsJsonAsync(_taskEndpoint, taskInputModel);
-            var postTaskResponseContent = await postTaskResponse.Content.ReadAsStringAsync();
-            var taskId = JsonConvert.DeserializeObject<Guid>(postTaskResponseContent);
-
-            var noteEndpoint = string.Format("http://localhost:9000/task/{0}/note", taskId);
-            var noteInputModel = _fixture.Create<NoteInputModel>();
-            Assert.Inconclusive();
-            //var postNoteResponse = await _httpClient.PostAsJsonAsync(postNoteEndpoint, noteInputModel);
-
-            //var getNoteResponse = await _httpClient.GetAsync(noteEndpoint);
-            //var getNoteResponseContent = await getNoteResponse.Content.ReadAsStringAsync();
-            //var noteViewModel = JsonConvert.DeserializeObject<NoteViewModel>(getNoteResponseContent);
-            //noteViewModel.Text.Should().Be(noteInputModel.Text);
         }
     }
 }
