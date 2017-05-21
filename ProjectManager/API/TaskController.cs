@@ -14,7 +14,7 @@ namespace ProjectManager.API
     public class TaskController : ApiController
     {
         private readonly TaskRepository _taskRepository;
-        private TaskQueryService _taskQueryService;
+        private readonly TaskQueryService _taskQueryService;
 
         public TaskController(TaskRepository taskRepository)
         {
@@ -22,27 +22,28 @@ namespace ProjectManager.API
             _taskQueryService = new TaskQueryService();
         }
 
-        [Route("project/{projectId}/task/{taskId}")]
-        public HttpResponseMessage Get(Guid projectId, Guid taskId)
+        [Route("task/{taskId}")]
+        public HttpResponseMessage Get(Guid taskId)
         {
-            var query = new GetTaskByIdQuery(taskId, projectId);
+            var query = new GetTaskByIdQuery(taskId);
             var task = _taskQueryService.Execute(query);
             return Request.CreateResponse(HttpStatusCode.OK, task);
         }
 
         [Route("project/{projectId}/task")]
-        public HttpResponseMessage Get(Guid projectId)
+        [HttpGet]
+        public HttpResponseMessage GetTasksForProject(Guid projectId)
         {
             var query = new GetTasksForProjectQuery(projectId);
             var tasks = _taskQueryService.Execute(query);
             return Request.CreateResponse(HttpStatusCode.OK, tasks);
         }
 
-        [Route("project/{projectId}/task")]
-        public async Task<HttpResponseMessage> Post(Guid projectId, [FromBody] TaskInputModel model)
+        [Route("task")]
+        public async Task<HttpResponseMessage> Post([FromBody] TaskInputModel model)
         {
             var id = Guid.NewGuid();
-            var task = new Domain.Task(id, projectId, model.Title, model.Priority, model.Deadline);
+            var task = new Domain.Task(id, model.ProjectId, model.Title, model.Priority, model.Deadline);
             await _taskRepository.SaveAsync(task);
             return Request.CreateResponse(HttpStatusCode.Created, id);
         }

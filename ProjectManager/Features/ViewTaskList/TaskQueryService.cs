@@ -19,20 +19,21 @@ namespace ProjectManager.Features.ViewTaskList
         public List<TaskViewModel> Execute(GetTasksForProjectQuery query)
         {
             var viewModels = new List<TaskViewModel>();
-            string projectFolder = Path.Combine(_storageFolder, "project-" + query.ProjectId);
-            foreach (var file in Directory.GetFiles(projectFolder, "taskViewModel-*"))
+            foreach (var file in Directory.GetFiles(_storageFolder, "taskViewModel-*"))
             {
                 var fileContent = File.ReadAllText(file);
                 var viewModel = JsonConvert.DeserializeObject<TaskViewModel>(fileContent);
-                viewModels.Add(viewModel);
+                if (viewModel.ProjectId.Equals(query.ProjectId))
+                {
+                    viewModels.Add(viewModel);
+                }
             }
             return viewModels;
         }
 
         public TaskViewModel Execute(GetTaskByIdQuery query)
         {
-            string projectFolder = Path.Combine(_storageFolder, "project-" + query.ProjectId);
-            string file = Path.Combine(projectFolder, "taskViewModel-" + query.Id + ".json");
+            string file = Path.Combine(_storageFolder, "taskViewModel-" + query.Id + ".json");
             string fileContent = File.ReadAllText(file);
             var viewModel = JsonConvert.DeserializeObject<TaskViewModel>(fileContent);
             return viewModel;

@@ -6,6 +6,8 @@ namespace ProjectManager.API
     public class TaskInputModel
     {
         [Required]
+        public Guid ProjectId { get; set; }
+        [Required]
         public string Title { get; set; }
         public DateTime? Deadline { get; set; }
         [Required]

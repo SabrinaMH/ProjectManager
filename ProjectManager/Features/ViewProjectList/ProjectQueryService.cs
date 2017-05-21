@@ -18,10 +18,9 @@ namespace ProjectManager.Features.ViewProjectList
         public List<ProjectViewModel> Execute(GetProjectsQuery query)
         {
             var viewModels = new List<ProjectViewModel>();
-            foreach (var directory in Directory.GetDirectories(_storageFolder, "project-*"))
+            foreach (var file in Directory.GetFiles(_storageFolder, "project-*"))
             {
-                var fileName = directory.Substring(directory.LastIndexOf('\\') + 1);
-                var fileContent = File.ReadAllText(Path.Combine(directory, fileName + ".json"));
+                var fileContent = File.ReadAllText(file);
                 var viewModel = JsonConvert.DeserializeObject<ProjectViewModel>(fileContent);
                 viewModels.Add(viewModel);
             }
@@ -30,8 +29,7 @@ namespace ProjectManager.Features.ViewProjectList
 
         public ProjectViewModel Execute(GetProjectByIdQuery query)
         {
-            var directory = Path.Combine(_storageFolder, "project-" + query.Id);
-            var file = Directory.GetFiles(directory, "projectViewModel-" + query.Id + ".json").First();
+            var file = Directory.GetFiles(_storageFolder, "projectViewModel-" + query.Id + ".json").First();
             var fileContent = File.ReadAllText(file);
             var viewModel = JsonConvert.DeserializeObject<ProjectViewModel>(fileContent);
             return viewModel;

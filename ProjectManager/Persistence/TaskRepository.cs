@@ -36,7 +36,7 @@ namespace ProjectManager.Persistence
         {
             var serializedTask = JsonConvert.SerializeObject(task.State);
             var fileName = string.Concat("task-", task.Id, ".json");
-            var path = Path.Combine(_storageFolder, "project-" + task.ProjectId, fileName);
+            var path = Path.Combine(_storageFolder, fileName);
             File.WriteAllText(path, serializedTask);
             foreach (var @event in task.Events)
             {

@@ -20,6 +20,7 @@ namespace Test
         private HttpClient _httpClient;
         private Fixture _fixture;
         private string _projectEndpoint;
+        private string _taskEndpoint;
 
         [SetUp]
         public void SetUp()
@@ -29,6 +30,7 @@ namespace Test
 
             _webApp = WebApp.Start<Startup>("http://*:9000/");
             _projectEndpoint = "http://localhost:9000/project";
+            _taskEndpoint = "http://localhost:9000/task";
             _httpClient = new HttpClient();
             _fixture = new Fixture();
         }
@@ -42,18 +44,12 @@ namespace Test
         [Test]
         public async System.Threading.Tasks.Task Given_A_Task_Then_It_Can_Be_Fetched_Through_The_Api()
         {
-            var projectInputModel = _fixture.Create<ProjectInputModel>();
-            var postProjectResponse = await _httpClient.PostAsJsonAsync(_projectEndpoint, projectInputModel);
-            var postProjectResponseContent = await postProjectResponse.Content.ReadAsStringAsync();
-            var projectId = JsonConvert.DeserializeObject<Guid>(postProjectResponseContent);
-
             var taskInputModel = _fixture.Create<TaskInputModel>();
-            var postTaskEndpoint = string.Format("{0}/{1}/task", _projectEndpoint, projectId);
-            var postTaskResponse = await _httpClient.PostAsJsonAsync(postTaskEndpoint, taskInputModel);
+            var postTaskResponse = await _httpClient.PostAsJsonAsync(_taskEndpoint, taskInputModel);
             var postTaskResponseContent = await postTaskResponse.Content.ReadAsStringAsync();
             var taskId = JsonConvert.DeserializeObject<Guid>(postTaskResponseContent);
 
-            var getTaskEndpoint = string.Format("{0}/{1}/task/{2}", _projectEndpoint, projectId, taskId);
+            var getTaskEndpoint = string.Format("{0}/{1}", _taskEndpoint, taskId);
             var getTaskResponse = await _httpClient.GetAsync(getTaskEndpoint);
             var getTasksResponseContent = await getTaskResponse.Content.ReadAsStringAsync();
             var taskViewModel = JsonConvert.DeserializeObject<TaskViewModel>(getTasksResponseContent);
@@ -63,14 +59,8 @@ namespace Test
         [Test]
         public async System.Threading.Tasks.Task Given_A_Task_With_A_Note_Then_The_Note_Can_Be_Fetched_Through_The_Api()
         {
-            var projectInputModel = _fixture.Create<ProjectInputModel>();
-            var postProjectResponse = await _httpClient.PostAsJsonAsync(_projectEndpoint, projectInputModel);
-            var postProjectResponseContent = await postProjectResponse.Content.ReadAsStringAsync();
-            var projectId = JsonConvert.DeserializeObject<Guid>(postProjectResponseContent);
-
             var taskInputModel = _fixture.Create<TaskInputModel>();
-            var postTaskEndpoint = string.Format("{0}/{1}/task", _projectEndpoint, projectId);
-            var postTaskResponse = await _httpClient.PostAsJsonAsync(postTaskEndpoint, taskInputModel);
+            var postTaskResponse = await _httpClient.PostAsJsonAsync(_taskEndpoint, taskInputModel);
             var postTaskResponseContent = await postTaskResponse.Content.ReadAsStringAsync();
             var taskId = JsonConvert.DeserializeObject<Guid>(postTaskResponseContent);
 

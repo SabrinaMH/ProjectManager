@@ -20,7 +20,7 @@ namespace ProjectManager.Features.AddTask
             var taskViewModel = new TaskViewModel(@event.Id, @event.ProjectId, @event.Title, @event.Deadline, @event.Priority, false, false);
             var serializedViewModel = JsonConvert.SerializeObject(taskViewModel);
             var fileName = string.Concat("taskViewModel-", @event.Id, ".json");
-            var path = Path.Combine(_storageFolder, "project-" + @event.ProjectId, fileName);
+            var path = Path.Combine(_storageFolder, fileName);
             File.WriteAllText(path, serializedViewModel);
         }
     }

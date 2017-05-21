@@ -5,11 +5,9 @@ namespace ProjectManager.Features.ViewProjectList
     public class GetTaskByIdQuery 
     {
         public Guid Id { get; }
-        public Guid ProjectId { get; set; }
-        public GetTaskByIdQuery(Guid id, Guid projectId)
+        public GetTaskByIdQuery(Guid id)
         {
             Id = id;
-            ProjectId = projectId;
         }
     }
 }
