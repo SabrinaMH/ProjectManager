@@ -24,6 +24,7 @@ namespace ProjectManager
             if (app == null) throw new ArgumentNullException($"{nameof(app)} was null");
             HttpConfiguration config = new HttpConfiguration();
             config.MapHttpAttributeRoutes();
+            config.EnsureInitialized();
             config.Services.Replace(typeof(IHttpControllerActivator), new CompositionRoot());
             
 

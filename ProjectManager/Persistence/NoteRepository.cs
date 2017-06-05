@@ -1,3 +1,4 @@
+using System;
 using System.Configuration;
 using System.IO;
 using Newtonsoft.Json;
@@ -23,14 +24,33 @@ namespace ProjectManager.Persistence
 
         public async System.Threading.Tasks.Task SaveAsync(Note note)
         {
-            var serializedTask = JsonConvert.SerializeObject(note.State);
+            var serializedNote = JsonConvert.SerializeObject(note.State);
             var fileName = string.Concat("note-", note.Id, ".json");
             var path = Path.Combine(_storageFolder, fileName);
-            File.WriteAllText(path, serializedTask);
+            File.WriteAllText(path, serializedNote);
             foreach (var @event in note.Events)
             {
                 await _eventBus.PublishAsync(@event);
             }
+        }
+
+        public Note Get(Guid id)
+        {
+            Note note = null;
+            foreach (var file in Directory.GetFiles(_storageFolder, "note-*"))
+            {
+                var fileContent = File.ReadAllText(file);
+                var noteState = JsonConvert.DeserializeObject<NoteState>(fileContent);
+                if (noteState.Id.Equals(id))
+                {
+                    note = new Note(noteState);
+                }
+            }
+
+            if (note != null)
+                return note;
+            else 
+                throw new NotFoundException(id.ToString());
         }
     }
 }

@@ -6,7 +6,7 @@ namespace ProjectManager.Features.ViewNote
     {
         public Guid Id { get; }
         public Guid TaskId { get; }
-        public string Text { get; }
+        public string Text { get; set; }
 
         public NoteViewModel(Guid id, Guid taskId, string text)
         {

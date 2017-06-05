@@ -13,11 +13,12 @@ function get(url) {
 function populateProjectList() {
     get('project')
         .then((projects) => {
+            var ul = $('<ul>').appendTo($('#projectList'));
+
             if (projects.length === 0) {
                 return;
             }
-
-            var ul = $('<ul>').appendTo($('#projectList'));
+            
             projects.forEach(function (project) {
                 extendDomWithProject(ul, project);
             });

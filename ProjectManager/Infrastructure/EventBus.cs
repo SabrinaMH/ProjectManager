@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ProjectManager.Features.AddProject;
-using ProjectManager.Features.AddTask;
 
 namespace ProjectManager.Infrastructure
 {

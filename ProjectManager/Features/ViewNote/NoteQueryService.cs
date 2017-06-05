@@ -25,5 +25,13 @@ namespace ProjectManager.Features.ViewNote
             }
             return null; // Todo: Deal with this more appropriately
         }
+
+        public NoteViewModel Execute(GetNoteByIdQuery query)
+        {
+            string file = Path.Combine(_storageFolder, "note-" + query.Id + ".json");
+            string fileContent = File.ReadAllText(file);
+            var viewModel = JsonConvert.DeserializeObject<NoteViewModel>(fileContent);
+            return viewModel;
+        }
     }
 }

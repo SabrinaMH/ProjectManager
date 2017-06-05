@@ -28,11 +28,28 @@ namespace ProjectManager.API
             return Request.CreateResponse(HttpStatusCode.OK, note);
         }
 
+        [Route("note/{id}")]
+        public HttpResponseMessage Get(Guid id)
+        {
+            var getNoteByIdQuery = new GetNoteByIdQuery(id);
+            var note = _noteQueryService.Execute(getNoteByIdQuery);
+            return Request.CreateResponse(HttpStatusCode.OK, note);
+        }
+
         [Route("note")]
-        public async Task<HttpResponseMessage> Post(NoteInputModel model)
+        public async Task<HttpResponseMessage> Post([FromBody] NoteInputModel model)
         {
             var id = Guid.NewGuid();
             var note = new Note(id, model.TaskId, model.Text);
+            await _noteRepository.SaveAsync(note);
+            return Request.CreateResponse(HttpStatusCode.Created, note.Id);
+        }
+
+        [Route("note/{id}")]
+        public async Task<HttpResponseMessage> Post(Guid id, [FromBody] UpdateNoteInputModel model)
+        {
+            var note = _noteRepository.Get(id);
+            note.Rewrite(model.Text);
             await _noteRepository.SaveAsync(note);
             return Request.CreateResponse(HttpStatusCode.Created, note.Id);
         }

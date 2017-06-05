@@ -20,7 +20,7 @@ namespace ProjectManager.Domain
                 throw new ArgumentException(nameof(text));
             
             State = new NoteState(id, taskId, text);
-            var noteCreated = new NoteCreated(id, taskId);
+            var noteCreated = new NoteCreated(id, taskId, text);
             _events.Add(noteCreated);
         }
 
@@ -29,13 +29,20 @@ namespace ProjectManager.Domain
             if (state == null) throw new ArgumentNullException(nameof(state));
             State = state;
         }
+
+        public void Rewrite(string newText)
+        {
+            State.Text = newText;
+            var noteRewritten = new NoteRewritten(Id, State.Text);
+            _events.Add(noteRewritten);
+        }
     }
 
     public class NoteState
     {
         public Guid Id { get; }
         public Guid TaskId { get; }
-        public string Text { get; }
+        public string Text { get; set; }
 
         public NoteState(Guid id, Guid taskId, string text)
         {

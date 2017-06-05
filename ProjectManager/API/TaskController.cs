@@ -22,6 +22,7 @@ namespace ProjectManager.API
         }
 
         [Route("task/{taskId}")]
+        [HttpGet]
         public HttpResponseMessage Get(Guid taskId)
         {
             var query = new GetTaskByIdQuery(taskId);
