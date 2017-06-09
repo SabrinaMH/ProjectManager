@@ -68,5 +68,13 @@ namespace Test
             var noteViewModel = JsonConvert.DeserializeObject<NoteViewModel>(getNoteResponseContent);
             noteViewModel.Id.Should().Be(noteId);
         }
+
+        [Test]
+        public async System.Threading.Tasks.Task When_Creating_A_Note_That_Is_Not_Associated_To_A_Task_Then_An_Error_Is_Returned()
+        {
+            var noteInputModel = new NoteInputModel(Guid.Empty, "Test");
+            var postNoteResponse = await _httpClient.PostAsJsonAsync(_noteEndpoint, noteInputModel);
+            postNoteResponse.IsSuccessStatusCode.Should().BeFalse();
+        }
     }
 }

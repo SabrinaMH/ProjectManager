@@ -18,6 +18,10 @@ namespace ProjectManager.Domain
         {
             if (string.IsNullOrWhiteSpace(text))
                 throw new ArgumentException(nameof(text));
+            if (id.Equals(Guid.Empty))
+                throw new ArgumentException(nameof(id));
+            if (taskId.Equals(Guid.Empty))
+                throw new ArgumentException(nameof(taskId));
             
             State = new NoteState(id, taskId, text);
             var noteCreated = new NoteCreated(id, taskId, text);

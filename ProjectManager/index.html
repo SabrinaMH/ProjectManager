@@ -11,8 +11,8 @@
     <header>
         <h1>Project Manager</h1>
     </header>
-    <section id="projectList" style="float: left; margin:1%"><h2>Projects</h2></section>
-    <section id="taskView" style="float:left; margin:1%">
+    <section id="projectList" style="float: left; margin:1% 5% 5% 3%"><h2>Projects</h2></section>
+    <section id="taskView" style="float:left; margin:1% 5% 5% 3%">
         <h2>Tasks</h2>
         <table id="taskTable">
             <thead>
@@ -27,15 +27,15 @@
             <tbody></tbody>
         </table>
     </section>
-    <section id="note" style="float:left; margin:1%">
+    <section id="note" style="float:left; margin:1% 5% 5% 3%">
         <h2>Note</h2>
-        <form action="/note" id="noteForm" style="clear:left; margin:1%">
+        <form action="/note" id="noteForm" style="clear:left; margin:0 1% 0 0">
             <textarea id="noteTextBox" rows="4" cols="50"></textarea>
             <input type="submit" value="Save Note">
         </form>
     </section>
     <br />
-    <form action="/project" id="addProjectForm" style="clear:left; margin:1%">
+    <form action="/project" id="addProjectForm" style="clear:left; margin:0 0 3% 3%">
         <div>
             <label for="projectTitle">Title:</label>
             <input type="text" id="projectTitle" name="title" />
@@ -45,7 +45,7 @@
         <input type="submit" value="Add Project">
     </form>
     <br />
-    <form action="/task" id="addTaskForm" style="margin:1%">
+    <form action="/task" id="addTaskForm" style="margin:0 0 0 3%">
         <div>
             <label for="taskTitle">Title:</label>
             <input type="text" id="taskTitle" name="title" />
@@ -58,11 +58,6 @@
         </div>
         <input type="submit" value="Add Task">
     </form>
-    <!--<div id="taskContextMenu">
-        <ul>
-            <li onclick="writeNote()">Write note</li>
-        </ul>
-    </div>-->
     <script type="text/javascript" src="src/script.js"></script>
 </body>
 </html>

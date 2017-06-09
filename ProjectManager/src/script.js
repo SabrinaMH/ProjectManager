@@ -18,15 +18,48 @@ function populateProjectList() {
             if (projects.length === 0) {
                 return;
             }
-            
+
+            projects.sort((p1, p2) => { return p1.Title > p2.Title });
             projects.forEach(function (project) {
                 extendDomWithProject(ul, project);
             });
 
             var firstProjectItem = document.querySelector("ul > li");
             firstProjectItem.classList.add('selectedProject');
-            selectedProjectId = projects[0].Id;
-            populateTaskView(selectedProjectId);
+            selectProject(projects[0].Id);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+function populateTaskView(projectId) {
+    $('#taskTable tbody').empty();
+    get('project/' + projectId + '/task')
+        .then((tasks) => {
+            if (tasks.length === 0) {
+                selectedTaskId = undefined;
+                $('#noteTextBox').val('');
+                return;
+            }
+
+            for (var i = 0; i < tasks.length; i++) {
+                extendDomWithTask(tasks[i]);
+            }
+
+            selectTask(tasks[0].Id);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+function populateNote(taskId) {
+    document.getElementById('noteTextBox').value = "";
+    get('task/' + taskId + '/note')
+        .then((note) => {
+            if (note === null) return;
+            document.getElementById('noteTextBox').value = note.Text;
         })
         .catch((err) => {
             console.log(err);
@@ -38,6 +71,18 @@ function appendToProjectList(projectId) {
         .then((project) => {
             var ul = $('#projectList ul');
             extendDomWithProject(ul, project);
+            selectProject(projectId);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+function appendToTaskView(taskId) {
+    get('/task/' + taskId)
+        .then((task) => {
+            extendDomWithTask(task);
+            selectTask(taskId);
         })
         .catch((err) => {
             console.log(err);
@@ -46,53 +91,34 @@ function appendToProjectList(projectId) {
 
 function extendDomWithProject(ul, project) {
     var li = $(document.createElement('li'));
+    li.attr('data-id', project.Id);
     li[0].classList.add("clickable");
     li.text(project.Title);
     li.click(() => 
     {
-        if (project.Id === selectedProjectId) return;
-
-        var previouslySelectedProject = document.getElementsByClassName('selectedProject')[0];
-        previouslySelectedProject.classList.remove('selectedProject');
-        li[0].classList.add('selectedProject');
-        selectedProjectId = project.Id;
-        populateTaskView(project.Id);
+        selectProject(project.Id);
     });
     ul.append(li);
-}
-
-function appendToTaskView(taskId) {
-    get('/task/' + taskId)
-        .then((task) => {
-            extendDomWithTask(task);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
 }
 
 function extendDomWithTask(task) {
     var taskTable = $('#taskTable tbody');
     var tr = $(document.createElement('tr'));
+    tr.attr('data-id', task.Id);
     tr[0].classList.add("clickable");
     tr[0].setAttribute('data-taskId', task.Id);
     tr.click(() => {
-        if (task.Id === selectedTaskId) return;
-
-        var previouslySelectedTask = document.getElementsByClassName('selectedTask')[0];
-        if (previouslySelectedTask !== undefined) {
-            previouslySelectedTask.classList.remove('selectedTask');
-        }
-        tr[0].classList.add('selectedTask');
-        selectedTaskId = task.Id;
-        populateNote(task.Id);
+        selectTask(task.Id);
     });
     var td = document.createElement('td');
     td.append(document.createTextNode(task.Title));
     tr.append(td);
     td = document.createElement('td');
-    var deadline = new Date(task.Deadline);
-    td.append(document.createTextNode(deadline.toString("HH:mm d/M/yyyy")));
+    var deadline = "";
+    if (task.Deadline !== null) {
+        deadline = new Date(task.Deadline).toString("HH:mm d/M/yyyy");
+    }
+    td.append(document.createTextNode(deadline));
     tr.append(td);
     td = document.createElement('td');
     td.append(document.createTextNode(task.Done));
@@ -105,6 +131,35 @@ function extendDomWithTask(task) {
     tr.append(td);
     taskTable.append(tr);
 }
+
+function selectProject(id) {
+    if (id === selectedProjectId) return;
+
+    var previouslySelectedProject = document.getElementsByClassName('selectedProject')[0];
+    if (previouslySelectedProject !== undefined) {
+        previouslySelectedProject.classList.remove('selectedProject');
+    }
+
+    var product = document.querySelector("[data-id='" + id + "']");
+    product.classList.add('selectedProject');
+    selectedProjectId = id;
+    populateTaskView(id);
+}
+
+function selectTask(id) {
+    if (id === selectedTaskId) return;
+
+    var previouslySelectedTask = document.getElementsByClassName('selectedTask')[0];
+    if (previouslySelectedTask !== undefined) {
+        previouslySelectedTask.classList.remove('selectedTask');
+    }
+
+    var task = document.querySelector("[data-id='" + id + "']");
+    task.classList.add('selectedTask');
+    selectedTaskId = id;
+    populateNote(id);
+}
+
 
 $('#addProjectForm').submit(function () {
     var title = $("#projectTitle").val().toString();
@@ -119,7 +174,6 @@ $('#addProjectForm').submit(function () {
             data: JSON.stringify(formData),
             success: function (projectId) {
                 appendToProjectList(projectId);
-                selectedProjectId = projectId;
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown, jqXHR.reason);
@@ -160,7 +214,7 @@ $('#addTaskForm').submit(function () {
 });
 
 $('#noteForm').submit(function () {
-    var text = $("#noteTextBox").val();
+    var text = document.getElementById("noteTextBox").value;
     var formData = { TaskId: selectedTaskId, Text: text }
     var formURL = $('#noteForm').attr("action");
     $.ajax(
@@ -202,27 +256,6 @@ function fillPriorityDropDown() {
     });
 }
 
-function populateTaskView(projectId) {
-    $('#taskTable tbody').empty();
-    get('project/' + projectId + '/task')
-        .then((tasks) => {
-            if (tasks.length === 0) {
-                $('#noteTextBox').empty();
-                return;
-            }
-            
-            for (var i = 0; i < tasks.length; i++) {
-                extendDomWithTask(tasks[i]);
-            }
-            
-            var firstTaskItem = document.querySelector("tbody > tr");
-            firstTaskItem.classList.add('selectedTask');
-            populateNote(tasks[0].Id);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-}
 
 function showContextMenuWhenRightClickingOnTask() {
     $('#taskTable').on('contextmenu', function (e) {
@@ -245,16 +278,6 @@ function showContextMenuWhenRightClickingOnTask() {
         });
 }
 
-function populateNote(taskId) {
-    $('#noteTextBox').empty();
-    get('task/' + taskId + '/note')
-        .then((note) => {
-            $('#noteTextBox').text(note.Text);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-}
 
 var selectedProjectId;
 var selectedTaskId;

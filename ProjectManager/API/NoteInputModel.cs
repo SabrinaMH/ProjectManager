@@ -9,6 +9,12 @@ namespace ProjectManager.API
         public Guid TaskId { get; set; }
         [Required]
         public string Text { get; set; }
+
+        public NoteInputModel(Guid taskId, string text)
+        {
+            TaskId = taskId;
+            Text = text;
+        }
         
     }
 }
