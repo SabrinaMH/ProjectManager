@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 using System.IO;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using ProjectManager.Features.ViewNote;
+using ProjectManager.Domain;
+using Task = System.Threading.Tasks.Task;
 
 namespace ProjectManager.Features.AddNote
 {
@@ -17,11 +17,17 @@ namespace ProjectManager.Features.AddNote
 
         public async Task Handle(NoteCreated @event)
         {
-            var noteViewModel = new NoteViewModel(@event.Id, @event.TaskId, @event.Text);
-            var serializedViewModel = JsonConvert.SerializeObject(noteViewModel);
-            var fileName = string.Concat("noteViewModel-", @event.Id, ".json");
+            var fileName = string.Concat("task-", @event.TaskId, ".json");
             var path = Path.Combine(_storageFolder, fileName);
-            File.WriteAllText(path, serializedViewModel);
+            var serializedTask = File.ReadAllText(path);
+            var taskState = JsonConvert.DeserializeObject<TaskState>(serializedTask);
+            taskState.HasNote = true;
+            File.WriteAllText(path, JsonConvert.SerializeObject(taskState));
+            //var noteViewModel = new NoteViewModel(@event.Id, @event.TaskId, @event.Text);
+            //var serializedViewModel = JsonConvert.SerializeObject(noteViewModel);
+            //var fileName = string.Concat("noteViewModel-", @event.Id, ".json");
+            //var path = Path.Combine(_storageFolder, fileName);
+            //File.WriteAllText(path, serializedViewModel);
         }
     }
 }

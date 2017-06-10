@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ProjectManager.Features.AddNote;
 
 namespace ProjectManager.Infrastructure
 {
@@ -21,6 +22,7 @@ namespace ProjectManager.Infrastructure
         {
            // RegisterHandler<ProjectCreated>(@event => new ProjectCreatedEventHandler().Handle(@event));
            // RegisterHandler<TaskCreated>(@event => new TaskCreatedEventHandler().Handle(@event));
+           RegisterHandler<NoteCreated>(@event => new NoteCreatedEventHandler().Handle(@event));
         }
 
         public async Task PublishAsync<T>(T @event) where T : Event

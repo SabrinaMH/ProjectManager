@@ -103,7 +103,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddTaskTests.cs" />
+    <Compile Include="TaskTests.cs" />
     <Compile Include="AddProjectTests.cs" />
     <Compile Include="NoteControllerTest.cs" />
     <Compile Include="NoteTest.cs" />

@@ -57,7 +57,7 @@ namespace ProjectManager.Domain
         public string Title { get; }
         public DateTime? Deadline { get; }
         public bool IsDone { get; }
-        public bool HasNote { get; }
+        public bool HasNote { get; set; }
         public string Priority { get; }
 
         public TaskState(Guid id, Guid projectId, string title, string priority, DateTime? deadline)

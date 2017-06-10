@@ -10,6 +10,80 @@ function get(url) {
     });
 }
 
+
+$('#addProjectForm').submit(function () {
+    var title = $("#projectTitle").val().toString();
+    var deadline = $("#addProjectForm #projectDeadline").val();
+    var formData = { Title: title, Deadline: deadline }
+    var formURL = $('#addProjectForm').attr("action");
+    $.ajax(
+        {
+            url: formURL,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(formData),
+            success: function (projectId) {
+                appendToProjectList(projectId);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown, jqXHR.reason);
+            },
+            complete: function () {
+                $("#addProjectForm")[0].reset();
+            }
+        });
+    return false;
+});
+
+$('#addTaskForm').submit(function () {
+    var title = $("#addTaskForm #taskTitle").val().toString();
+    var date = $("#deadlineDate").val();
+    var time = $('#deadlineTime').val();
+    var deadline = new Date(date + ' ' + time);
+    var priority = $("#addTaskForm #priority").val();
+    var formData = { ProjectId: selectedProjectId, Title: title, Deadline: deadline, Priority: priority }
+    var formURL = $('#addTaskForm').attr("action");
+
+    $.ajax(
+        {
+            url: formURL,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(formData),
+            success: function (taskId) {
+                appendToTaskView(taskId);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown, jqXHR.reason);
+            },
+            complete: function () {
+                $("#addTaskForm")[0].reset();
+            }
+        });
+    return false;
+});
+
+$('#noteForm').submit(function () {
+    var text = document.getElementById("noteTextBox").value;
+    var formData = { TaskId: selectedTaskId, Text: text }
+    var formURL = $('#noteForm').attr("action");
+    $.ajax(
+        {
+            url: formURL,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(formData),
+            success: function () {
+                refreshTask(selectedTaskId);
+                alert("Saved note successfully");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown, jqXHR.reason);
+            }
+        });
+    return false;
+});
+
 function populateProjectList() {
     get('project')
         .then((projects) => {
@@ -78,15 +152,38 @@ function appendToProjectList(projectId) {
         });
 }
 
-function appendToTaskView(taskId) {
-    get('/task/' + taskId)
+function appendToTaskView(id) {
+    get('/task/' + id)
         .then((task) => {
             extendDomWithTask(task);
-            selectTask(taskId);
+            selectTask(id);
         })
         .catch((err) => {
             console.log(err);
         });
+}
+
+function refreshTask(id) {
+    get('/task/' + id)
+        .then((task) => {
+            var taskTableRow = document.querySelector("[data-id='" + id + "']");
+            taskTableRow.children[0].textContent = task.Title;
+            taskTableRow.children[1].textContent = formatDeadline(task.Deadline);
+            taskTableRow.children[2].textContent = task.Done;
+            taskTableRow.children[3].textContent = task.HasNote;
+            taskTableRow.children[4].textContent = task.Priority;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+function formatDeadline(deadline) {
+    var formattedDeadline = "";
+    if (deadline !== null) {
+        formattedDeadline = new Date(deadline).toString("HH:mm d/M/yyyy");
+    }
+    return formattedDeadline;
 }
 
 function extendDomWithProject(ul, project) {
@@ -114,10 +211,7 @@ function extendDomWithTask(task) {
     td.append(document.createTextNode(task.Title));
     tr.append(td);
     td = document.createElement('td');
-    var deadline = "";
-    if (task.Deadline !== null) {
-        deadline = new Date(task.Deadline).toString("HH:mm d/M/yyyy");
-    }
+    var deadline = formatDeadline(task.Deadline);
     td.append(document.createTextNode(deadline));
     tr.append(td);
     td = document.createElement('td');
@@ -161,77 +255,6 @@ function selectTask(id) {
 }
 
 
-$('#addProjectForm').submit(function () {
-    var title = $("#projectTitle").val().toString();
-    var deadline = $("#addProjectForm #projectDeadline").val();
-    var formData = { Title: title, Deadline: deadline }
-    var formURL = $('#addProjectForm').attr("action");
-    $.ajax(
-        {
-            url: formURL,
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(formData),
-            success: function (projectId) {
-                appendToProjectList(projectId);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown, jqXHR.reason);
-            },
-            complete: function() {
-                $("#addProjectForm")[0].reset();
-            }
-        });
-     return false;
-});
-
-$('#addTaskForm').submit(function () {
-    var title = $("#addTaskForm #taskTitle").val().toString();
-    var date = $("#deadlineDate").val();
-    var time = $('#deadlineTime').val();
-    var deadline = new Date(date + ' ' + time);
-    var priority = $("#addTaskForm #priority").val();
-    var formData = { ProjectId: selectedProjectId, Title: title, Deadline: deadline, Priority: priority }
-    var formURL = $('#addTaskForm').attr("action");
-
-    $.ajax(
-        {
-            url: formURL,
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(formData),
-            success: function (taskId) {
-                appendToTaskView(taskId);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown, jqXHR.reason);
-            },
-            complete: function () {
-                $("#addTaskForm")[0].reset();
-            }
-        });
-    return false;
-});
-
-$('#noteForm').submit(function () {
-    var text = document.getElementById("noteTextBox").value;
-    var formData = { TaskId: selectedTaskId, Text: text }
-    var formURL = $('#noteForm').attr("action");
-    $.ajax(
-        {
-            url: formURL,
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(formData),
-            success: function (taskId) {
-                alert("Saved note successfully");
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown, jqXHR.reason);
-            }
-        });
-    return false;
-});
 
 function fillPriorityDropDown() {
     $.ajax(
