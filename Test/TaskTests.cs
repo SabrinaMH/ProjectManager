@@ -131,7 +131,7 @@ namespace Test
             var getTasksResponse = await _httpClient.GetAsync(tasksForAProjectEndpoint);
             var getTasksResponseContent = await getTasksResponse.Content.ReadAsStringAsync();
             var taskViewModels = JsonConvert.DeserializeObject<List<ProjectViewModel>>(getTasksResponseContent);
-            taskViewModels.Should().Contain(x => x.Id.Equals(taskId) && x.Deadline.Equals(taskInputModel.Deadline));
+            taskViewModels.Should().Contain(x => x.Id.Equals(taskId));
         }
 
         [Test]

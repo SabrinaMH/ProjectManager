@@ -10,7 +10,7 @@ $('#editProjectForm').submit(function () {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(formData),
             success: function () {
-                window.opener.refreshTask(selectedProjectId);
+                window.opener.refreshProject(selectedProjectId);
                 close();
             },
             error: function (jqXHR, textStatus, errorThrown) {

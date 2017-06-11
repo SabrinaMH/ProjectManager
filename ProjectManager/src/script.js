@@ -201,7 +201,7 @@ function refreshProject(id) {
     get('/project/' + id)
         .then((project) => {
             var projectEntry = document.querySelector("[data-id='" + id + "']");
-            projectEntry.children[0].textContent = project.Title;
+            projectEntry.textContent = project.Title;
 
         })
         .catch((err) => {

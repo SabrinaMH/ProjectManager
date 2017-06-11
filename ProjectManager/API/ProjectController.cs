@@ -41,7 +41,7 @@ namespace ProjectManager.API
         public async Task<HttpResponseMessage> Post([FromBody] AddProjectInputModel model)
         {
             var id = Guid.NewGuid();
-            var project = new Project(id, model.Title, model.Deadline);
+            var project = new Project(id, model.Title);
             await _projectRepository.SaveAsync(project);
             return Request.CreateResponse(HttpStatusCode.Created, id);
         }
@@ -50,7 +50,7 @@ namespace ProjectManager.API
         public async Task<HttpResponseMessage> Post(Guid id, [FromBody] UpdateProjectInputModel model)
         {
             var project = _projectRepository.Get(id);
-            project.Update(model.Title, model.Deadline);
+            project.Update(model.Title);
             await _projectRepository.SaveAsync(project);
             return Request.CreateResponse(HttpStatusCode.OK);
         }

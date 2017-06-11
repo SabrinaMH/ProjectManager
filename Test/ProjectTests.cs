@@ -69,7 +69,7 @@ namespace Test
             var getProjectsResponse = await _httpClient.GetAsync(_projectEndpoint);
             var getProjectsResponseContent = await getProjectsResponse.Content.ReadAsStringAsync();
             var projectViewModels = JsonConvert.DeserializeObject<List<ProjectViewModel>>(getProjectsResponseContent);
-            projectViewModels.Should().Contain(x => x.Id.Equals(projectId) && x.Deadline.Equals(projectInputModel.Deadline));
+            projectViewModels.Should().Contain(x => x.Id.Equals(projectId));
         }
 
         [Test]
@@ -97,7 +97,6 @@ namespace Test
             var getProjectResponse = await _httpClient.GetAsync(specificProjectEndpoint);
             var projectViewModel = JsonConvert.DeserializeObject<ProjectViewModel>(await getProjectResponse.Content.ReadAsStringAsync());
             projectViewModel.Id.Should().Be(projectId);
-            projectViewModel.Deadline.Should().Be(updateProjectInputModel.Deadline);
             projectViewModel.Title.Should().Be(updateProjectInputModel.Title);
         }
 
