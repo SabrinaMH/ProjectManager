@@ -93,6 +93,7 @@
     <Compile Include="Features\ManageNote\NoteRewrittenEventHandler.cs" />
     <Compile Include="Features\ManageNote\NoteCreatedEventHandler.cs" />
     <Compile Include="Features\ManageNote\NoteRewritten.cs" />
+    <Compile Include="Features\SendEmail\EmailClient.cs" />
     <Compile Include="Features\SendEmail\EmailService.cs" />
     <Compile Include="Features\ViewNote\GetNoteByIdQuery.cs" />
     <Compile Include="Features\ViewNote\NoteQueryService.cs" />

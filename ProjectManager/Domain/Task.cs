@@ -68,6 +68,7 @@ namespace ProjectManager.Domain
         public bool HasNote { get; set; }
         public string Priority { get; set; }
         public int SendEmailNumberOfDaysBeforeDeadline { get; set; }
+        public bool IsEmailSent { get; set; }
 
         public TaskState(Guid id, Guid projectId, string title, string priority, DateTime? deadline, int sendEmailNumberOfDaysBeforeDeadline)
         {
@@ -77,6 +78,8 @@ namespace ProjectManager.Domain
             Deadline = deadline;
             SendEmailNumberOfDaysBeforeDeadline = sendEmailNumberOfDaysBeforeDeadline;
             Priority = priority;
+            IsEmailSent = false;
         }
+
     }
 }
