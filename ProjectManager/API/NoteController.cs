@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,22 +21,6 @@ namespace ProjectManager.API
             _noteQueryService = new NoteQueryService();
         }
 
-        [Route("task/{taskId}/note")]
-        public HttpResponseMessage GetNoteForTask(Guid taskId)
-        {
-            var getNoteForTaskQuery = new GetNoteForTaskQuery(taskId);
-            var note = _noteQueryService.Execute(getNoteForTaskQuery);
-            return Request.CreateResponse(HttpStatusCode.OK, note);
-        }
-
-        [Route("note/{id}")]
-        public HttpResponseMessage Get(Guid id)
-        {
-            var getNoteByIdQuery = new GetNoteByIdQuery(id);
-            var note = _noteQueryService.Execute(getNoteByIdQuery);
-            return Request.CreateResponse(HttpStatusCode.OK, note);
-        }
-
         [Route("note")]
         public async Task<HttpResponseMessage> Post([FromBody] NoteInputModel model)
         {
@@ -46,12 +31,43 @@ namespace ProjectManager.API
         }
 
         [Route("note/{id}")]
+        public HttpResponseMessage Get(Guid id)
+        {
+            var getNoteByIdQuery = new GetNoteByIdQuery(id);
+            try
+            {
+                var note = _noteQueryService.Execute(getNoteByIdQuery);
+                return Request.CreateResponse(HttpStatusCode.OK, note);
+            }
+            catch (FileNotFoundException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+        }
+
+        [Route("task/{taskId}/note")]
+        public HttpResponseMessage GetNoteForTask(Guid taskId)
+        {
+            var getNoteForTaskQuery = new GetNoteForTaskQuery(taskId);
+            var note = _noteQueryService.Execute(getNoteForTaskQuery);
+            return Request.CreateResponse(HttpStatusCode.OK, note);
+        }
+        
+        [Route("note/{id}")]
         public async Task<HttpResponseMessage> Post(Guid id, [FromBody] UpdateNoteInputModel model)
         {
             var note = _noteRepository.Get(id);
             note.Rewrite(model.Text);
             await _noteRepository.SaveAsync(note);
             return Request.CreateResponse(HttpStatusCode.Created, note.Id);
+        }
+
+        [Route("note/{id}")]
+        public async Task<HttpResponseMessage> Delete(Guid id)
+        {
+            var note = _noteRepository.Get(id);
+            await _noteRepository.DeleteAsync(note);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

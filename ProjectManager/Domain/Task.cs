@@ -31,6 +31,13 @@ namespace ProjectManager.Domain
             State = state;
         }
 
+        public void Update(string title, string priority, DateTime? deadline)
+        {
+            State.Title = title;
+            State.Priority = priority;
+            State.Deadline = deadline;
+        }
+
         protected bool Equals(Task other)
         {
             return Id.Equals(other.Id);
@@ -54,11 +61,11 @@ namespace ProjectManager.Domain
     {
         public Guid Id { get; }
         public Guid ProjectId { get; }
-        public string Title { get; }
-        public DateTime? Deadline { get; }
+        public string Title { get; set; }
+        public DateTime? Deadline { get; set; }
         public bool IsDone { get; }
         public bool HasNote { get; set; }
-        public string Priority { get; }
+        public string Priority { get; set; }
 
         public TaskState(Guid id, Guid projectId, string title, string priority, DateTime? deadline)
         {

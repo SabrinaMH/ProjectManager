@@ -1,12 +1,12 @@
 ﻿using System.Configuration;
 using System.IO;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 using ProjectManager.Domain;
 using ProjectManager.Infrastructure;
 using ProjectManager.Persistence;
+using Task = System.Threading.Tasks.Task;
 
 namespace Test
 {
@@ -33,7 +33,7 @@ namespace Test
         }
 
         [Test]
-        public async System.Threading.Tasks.Task Can_Serialize_And_Then_Deserialize_ProjectStates()
+        public async Task Can_Serialize_And_Then_Deserialize_ProjectStates()
         {
             var fixture = new Fixture();
             var project = fixture.Create<Project>();

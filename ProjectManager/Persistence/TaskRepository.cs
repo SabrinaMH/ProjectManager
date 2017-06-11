@@ -1,3 +1,4 @@
+using System;
 using System.Configuration;
 using System.IO;
 using Newtonsoft.Json;
@@ -20,17 +21,25 @@ namespace ProjectManager.Persistence
                 Directory.CreateDirectory(_storageFolder);
             }
         }
-        //public List<Project> Get()
-        //{
-        //    var projects = new List<Project>();
-        //    foreach (var file in Directory.GetFiles(_storageFolder, "project-*"))
-        //    {
-        //        var fileContent = File.ReadAllText(file);
-        //        var projectState = JsonConvert.DeserializeObject<ProjectState>(fileContent);
-        //        projects.Add(new Project(projectState));
-        //    }
-        //    return projects;
-        //}
+
+        public Task Get(Guid id)
+        {
+            Task task = null;
+            foreach (var file in Directory.GetFiles(_storageFolder, "task-*"))
+            {
+                var fileContent = File.ReadAllText(file);
+                var taskState = JsonConvert.DeserializeObject<TaskState>(fileContent);
+                if (taskState.Id.Equals(id))
+                {
+                    task = new Task(taskState);
+                }
+            }
+
+            if (task != null)
+                return task;
+            else
+                throw new NotFoundException(id.ToString());
+        }
 
         public async System.Threading.Tasks.Task SaveAsync(Task task)
         {

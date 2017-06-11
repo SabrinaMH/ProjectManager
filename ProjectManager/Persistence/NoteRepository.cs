@@ -3,7 +3,9 @@ using System.Configuration;
 using System.IO;
 using Newtonsoft.Json;
 using ProjectManager.Domain;
+using ProjectManager.Features.AddNote;
 using ProjectManager.Infrastructure;
+using Task = System.Threading.Tasks.Task;
 
 namespace ProjectManager.Persistence
 {
@@ -22,7 +24,7 @@ namespace ProjectManager.Persistence
             }
         }
 
-        public async System.Threading.Tasks.Task SaveAsync(Note note)
+        public async Task SaveAsync(Note note)
         {
             var serializedNote = JsonConvert.SerializeObject(note.State);
             var fileName = string.Concat("note-", note.Id, ".json");
@@ -32,6 +34,15 @@ namespace ProjectManager.Persistence
             {
                 await _eventBus.PublishAsync(@event);
             }
+        }
+
+        public async Task DeleteAsync(Note note)
+        {
+            var fileName = string.Concat("note-", note.Id, ".json");
+            var path = Path.Combine(_storageFolder, fileName);
+            File.Delete(path);
+            var @event = new NoteDeleted(note.Id, note.TaskId);
+            await _eventBus.PublishAsync(@event);
         }
 
         public Note Get(Guid id)

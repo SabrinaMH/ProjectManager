@@ -29,12 +29,15 @@
     </section>
     <section id="note" style="float:left; margin:1% 5% 5% 3%">
         <h2>Note</h2>
-        <form action="/note" id="noteForm" style="clear:left; margin:0 1% 0 0">
+        <form id="noteForm" style="clear:left; margin:0 1% 0 0">
             <textarea id="noteTextBox" rows="4" cols="50"></textarea>
             <input type="submit" value="Save Note">
         </form>
     </section>
-    <br />
+<br />
+    <form style="clear: left; margin:0 0 3% 3%">
+        <input type="button" value="Edit Task" onClick="openChild('editTask.html','editTaskWindow')">
+    </form>
     <form action="/project" id="addProjectForm" style="clear:left; margin:0 0 3% 3%">
         <div>
             <label for="projectTitle">Title:</label>

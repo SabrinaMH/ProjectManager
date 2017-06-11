@@ -23,6 +23,7 @@ namespace ProjectManager.Infrastructure
            // RegisterHandler<ProjectCreated>(@event => new ProjectCreatedEventHandler().Handle(@event));
            // RegisterHandler<TaskCreated>(@event => new TaskCreatedEventHandler().Handle(@event));
            RegisterHandler<NoteCreated>(@event => new NoteCreatedEventHandler().Handle(@event));
+           RegisterHandler<NoteDeleted>(@event => new NoteDeletedEventHandler().Handle(@event));
         }
 
         public async Task PublishAsync<T>(T @event) where T : Event

@@ -64,23 +64,56 @@ $('#addTaskForm').submit(function () {
 });
 
 $('#noteForm').submit(function () {
-    var text = document.getElementById("noteTextBox").value;
-    var formData = { TaskId: selectedTaskId, Text: text }
-    var formURL = $('#noteForm').attr("action");
-    $.ajax(
+    var textBox = $('#noteTextBox');
+    var noteId = textBox.attr('data-id');
+    var text = textBox.val();
+
+    if (!noteId) {
+        var formData = { TaskId: selectedTaskId, Text: text }
+        $.ajax(
         {
-            url: formURL,
+            url: 'note',
             type: "POST",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(formData),
-            success: function () {
+            success: function() {
                 refreshTask(selectedTaskId);
                 alert("Saved note successfully");
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown, jqXHR.reason);
             }
         });
+    }
+    else if (!text) {
+        $.ajax(
+        {
+            url: 'note/' + noteId,
+            type: "DELETE",
+            contentType: "application/json; charset=utf-8",
+            success: function() {
+                refreshTask(selectedTaskId);
+                textBox.removeAttr('data-id');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown, jqXHR.reason);
+            }
+        });
+    } else {
+        var formData = { Text: text }
+        $.ajax(
+            {
+                url: 'note/' + noteId,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(formData),
+                success: function () {
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown, jqXHR.reason);
+                }
+            });
+    }
     return false;
 });
 
@@ -133,7 +166,9 @@ function populateNote(taskId) {
     get('task/' + taskId + '/note')
         .then((note) => {
             if (note === null) return;
-            document.getElementById('noteTextBox').value = note.Text;
+            var textBox = document.getElementById('noteTextBox');
+            textBox.value = note.Text;
+            textBox.setAttribute('data-id', note.Id);
         })
         .catch((err) => {
             console.log(err);
@@ -203,7 +238,7 @@ function extendDomWithTask(task) {
     var tr = $(document.createElement('tr'));
     tr.attr('data-id', task.Id);
     tr[0].classList.add("clickable");
-    tr[0].setAttribute('data-taskId', task.Id);
+    tr[0].setAttribute('data-id', task.Id);
     tr.click(() => {
         selectTask(task.Id);
     });
@@ -279,32 +314,13 @@ function fillPriorityDropDown() {
     });
 }
 
-
-function showContextMenuWhenRightClickingOnTask() {
-    $('#taskTable').on('contextmenu', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if ($(e.target).is('td')) {
-            selectedTaskId = e.target.parentNode.getAttribute('data-taskId');
-            $('#taskContextMenu').css({
-                top: e.pageY + 'px',
-                left: e.pageX + 'px'
-            }).show();
-        }
-        return false;
-    });
-
-    $(document).on('click',
-        function (e) {
-            if (!$(e.target).is('#taskContextMenu li'))
-                $('#taskContextMenu').hide();
-        });
+function openChild(file, window) {
+    childWindow = open(file, window, 'resizable=no,width=500,height=600');
+    if (childWindow.opener == null) childWindow.opener = self;
 }
-
 
 var selectedProjectId;
 var selectedTaskId;
 
 fillPriorityDropDown();
 populateProjectList();
-//showContextMenuWhenRightClickingOnTask();

@@ -83,16 +83,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\UpdateTaskInputModel.cs" />
     <Compile Include="API\NoteController.cs" />
     <Compile Include="API\NoteInputModel.cs" />
     <Compile Include="API\UpdateNoteInputModel.cs" />
+    <Compile Include="Features\ManageNote\NoteDeletedEventHandler.cs" />
+    <Compile Include="Features\ManageNote\NoteDeleted.cs" />
     <Compile Include="Features\ManageNote\NoteRewrittenEventHandler.cs" />
     <Compile Include="Features\ManageNote\NoteCreatedEventHandler.cs" />
     <Compile Include="Features\ManageNote\NoteRewritten.cs" />
     <Compile Include="Features\ViewNote\GetNoteByIdQuery.cs" />
     <Compile Include="Features\ViewNote\NoteQueryService.cs" />
     <Compile Include="API\TaskController.cs" />
-    <Compile Include="API\TaskInputModel.cs" />
+    <Compile Include="API\AddTaskInputModel.cs" />
     <Compile Include="Domain\Enumeration.cs" />
     <Compile Include="Domain\Note.cs" />
     <Compile Include="Features\ManageNote\NoteCreated.cs" />
@@ -132,6 +135,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="editTask.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -140,6 +146,9 @@
     </Content>
     <Content Include="lib\jquery.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="src\editTask.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="src\script.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

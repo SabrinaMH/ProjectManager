@@ -7,6 +7,7 @@ using System.Web.Http;
 using ProjectManager.Domain;
 using ProjectManager.Features.ViewTaskList;
 using ProjectManager.Persistence;
+using Task = System.Threading.Tasks.Task;
 
 namespace ProjectManager.API
 {
@@ -40,7 +41,7 @@ namespace ProjectManager.API
         }
 
         [Route("task")]
-        public async Task<HttpResponseMessage> Post([FromBody] TaskInputModel model)
+        public async Task<HttpResponseMessage> Post([FromBody] AddTaskInputModel model)
         {
             var id = Guid.NewGuid();
             var task = new Domain.Task(id, model.ProjectId, model.Title, model.Priority, model.Deadline);
@@ -48,6 +49,14 @@ namespace ProjectManager.API
             return Request.CreateResponse(HttpStatusCode.Created, id);
         }
 
+        [Route("task/{id}")]
+        public async Task<HttpResponseMessage> Post(Guid id, [FromBody] UpdateTaskInputModel model)
+        {
+            var task = _taskRepository.Get(id);
+            task.Update(model.Title, model.Priority, model.Deadline);
+            await _taskRepository.SaveAsync(task);
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
 
         [Route("task/priority")]
         [HttpGet]

@@ -6,22 +6,22 @@ using Task = System.Threading.Tasks.Task;
 
 namespace ProjectManager.Features.AddNote
 {
-    public class NoteCreatedEventHandler
+    public class NoteDeletedEventHandler
     {
         private readonly string _storageFolder;
 
-        public NoteCreatedEventHandler()
+        public NoteDeletedEventHandler()
         {
             _storageFolder = ConfigurationManager.AppSettings["storage.folder"];
         }
 
-        public async Task Handle(NoteCreated @event)
+        public async Task Handle(NoteDeleted @event)
         {
             var fileName = string.Concat("task-", @event.TaskId, ".json");
             var path = Path.Combine(_storageFolder, fileName);
             var serializedTask = File.ReadAllText(path);
             var taskState = JsonConvert.DeserializeObject<TaskState>(serializedTask);
-            taskState.HasNote = true;
+            taskState.HasNote = false;
             File.WriteAllText(path, JsonConvert.SerializeObject(taskState));
         }
     }
