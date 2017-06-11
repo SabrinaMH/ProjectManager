@@ -3,7 +3,7 @@ using System.Configuration;
 using System.IO;
 using Newtonsoft.Json;
 using ProjectManager.Domain;
-using ProjectManager.Features.AddNote;
+using ProjectManager.Features.ManageNote;
 using ProjectManager.Infrastructure;
 using Task = System.Threading.Tasks.Task;
 

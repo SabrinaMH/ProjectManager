@@ -17,11 +17,11 @@ namespace ProjectManager.Features.AddProject
 
         public async Task Handle(ProjectCreated @event)
         {
-            var projectViewModel = new ProjectViewModel(@event.Id, @event.Title);
-            var serializedViewModel = JsonConvert.SerializeObject(projectViewModel);
-            var fileName = string.Concat("projectViewModel-", @event.Id + ".json");
-            var path = Path.Combine(_storageFolder, fileName);
-            File.WriteAllText(path, serializedViewModel);
+            //var projectViewModel = new ProjectViewModel(@event.Id, @event.Title);
+            //var serializedViewModel = JsonConvert.SerializeObject(projectViewModel);
+            //var fileName = string.Concat("projectViewModel-", @event.Id + ".json");
+            //var path = Path.Combine(_storageFolder, fileName);
+            //File.WriteAllText(path, serializedViewModel);
         }
     }
 }

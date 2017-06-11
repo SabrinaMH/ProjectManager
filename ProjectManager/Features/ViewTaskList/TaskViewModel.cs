@@ -11,8 +11,9 @@ namespace ProjectManager.Features.ViewTaskList
         public Guid ProjectId { get; }
         public bool HasNote { get; }
         public bool Done { get; }
+        public int SendEmailNumberOfDaysBeforeDeadline { get; }
 
-        public TaskViewModel(Guid id, Guid projectId, string title, DateTime? deadline, string priority, bool hasNote, bool done)
+        public TaskViewModel(Guid id, Guid projectId, string title, DateTime? deadline, string priority, bool hasNote, bool done, int sendEmailNumberOfDaysBeforeDeadline)
         {
             Id = id;
             ProjectId = projectId;
@@ -21,6 +22,7 @@ namespace ProjectManager.Features.ViewTaskList
             Priority = priority;
             HasNote = hasNote;
             Done = done;
+            SendEmailNumberOfDaysBeforeDeadline = sendEmailNumberOfDaysBeforeDeadline;
         }
     }
 }

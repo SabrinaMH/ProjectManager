@@ -39,8 +39,9 @@ $('#addTaskForm').submit(function () {
     var date = $("#deadlineDate").val();
     var time = $('#deadlineTime').val();
     var deadline = new Date(date + ' ' + time);
+    var sendEmailNumberOfDaysBeforeDeadline = $('#sendEmail').val();
     var priority = $("#addTaskForm #priority").val();
-    var formData = { ProjectId: selectedProjectId, Title: title, Deadline: deadline, Priority: priority }
+    var formData = { ProjectId: selectedProjectId, Title: title, Deadline: deadline, Priority: priority, SendEmailNumberOfDaysBeforeDeadline: sendEmailNumberOfDaysBeforeDeadline }
     var formURL = $('#addTaskForm').attr("action");
 
     $.ajax(
@@ -216,9 +217,10 @@ function refreshTask(id) {
             var taskTableRow = document.querySelector("[data-id='" + id + "']");
             taskTableRow.children[0].textContent = task.Title;
             taskTableRow.children[1].textContent = formatDeadline(task.Deadline);
-            taskTableRow.children[2].textContent = task.Done;
-            taskTableRow.children[3].textContent = task.HasNote;
-            taskTableRow.children[4].textContent = task.Priority;
+            taskTableRow.children[2].textContent = task.SendEmailNumberOfDaysBeforeDeadline;
+            taskTableRow.children[3].textContent = task.Done;
+            taskTableRow.children[4].textContent = task.HasNote;
+            taskTableRow.children[5].textContent = task.Priority;
         })
         .catch((err) => {
             console.log(err);
@@ -260,6 +262,9 @@ function extendDomWithTask(task) {
     td = document.createElement('td');
     var deadline = formatDeadline(task.Deadline);
     td.append(document.createTextNode(deadline));
+    tr.append(td);
+    td = document.createElement('td');
+    td.append(document.createTextNode(task.SendEmailNumberOfDaysBeforeDeadline));
     tr.append(td);
     td = document.createElement('td');
     td.append(document.createTextNode(task.Done));

@@ -49,14 +49,25 @@
     <br />
     <form action="/task" id="addTaskForm" style="margin:0 0 0 3%">
         <div>
-            <label for="taskTitle">Title:</label>
-            <input type="text" id="taskTitle" name="title" />
-            <label for="deadlineDate">Deadline:</label>
-            <input type="date" id="deadlineDate" name="deadline">
-            <label for="deadlineTime"></label>
-            <input type="time" id="deadlineTime" />
-            <label for="priority">Priority:</label>
-            <select id="priority" name="title"></select>
+            <label for="taskTitle">
+                Title:
+                <input type="text" id="taskTitle" name="title" />
+            </label>
+            <label for="deadlineDate">
+                Deadline:
+                <input type="date" id="deadlineDate" name="deadline">
+            </label>
+            <label for="deadlineTime">
+                <input type="time" id="deadlineTime" />
+            </label>
+            <label for="sendEmail">
+                Send email number of days before deadline:
+                <input type="number" id="sendEmail" name="sendEmail" />
+            </label>
+            <label for="priority">
+                Priority:
+                <select id="priority" name="title"></select>
+            </label>
         </div>
         <input type="submit" value="Add Task">
     </form>

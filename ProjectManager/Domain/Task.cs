@@ -15,13 +15,13 @@ namespace ProjectManager.Domain
         public TaskState State { get; }
         public ReadOnlyCollection<Event> Events => _events.AsReadOnly();
 
-        public Task(Guid id, Guid projectId, string title, string priority, DateTime? deadline)
+        public Task(Guid id, Guid projectId, string title, string priority, DateTime? deadline, int sendEmailNumberOfDaysBeforeDeadline)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException(nameof(title));
 
-            State = new TaskState(id, projectId, title, priority, deadline);
-            var taskCreated = new TaskCreated(id, projectId, title, priority, deadline);
+            State = new TaskState(id, projectId, title, priority, deadline, sendEmailNumberOfDaysBeforeDeadline);
+            var taskCreated = new TaskCreated(id, projectId, title, priority, deadline, sendEmailNumberOfDaysBeforeDeadline);
             _events.Add(taskCreated);
         }
 
@@ -31,11 +31,12 @@ namespace ProjectManager.Domain
             State = state;
         }
 
-        public void Update(string title, string priority, DateTime? deadline)
+        public void Update(string title, string priority, DateTime? deadline, int sendEmailNumberOfDaysBeforeDeadline)
         {
             State.Title = title;
             State.Priority = priority;
             State.Deadline = deadline;
+            State.SendEmailNumberOfDaysBeforeDeadline = sendEmailNumberOfDaysBeforeDeadline;
         }
 
         protected bool Equals(Task other)
@@ -66,13 +67,15 @@ namespace ProjectManager.Domain
         public bool IsDone { get; }
         public bool HasNote { get; set; }
         public string Priority { get; set; }
+        public int SendEmailNumberOfDaysBeforeDeadline { get; set; }
 
-        public TaskState(Guid id, Guid projectId, string title, string priority, DateTime? deadline)
+        public TaskState(Guid id, Guid projectId, string title, string priority, DateTime? deadline, int sendEmailNumberOfDaysBeforeDeadline)
         {
             Id = id;
             ProjectId = projectId;
             Title = title;
             Deadline = deadline;
+            SendEmailNumberOfDaysBeforeDeadline = sendEmailNumberOfDaysBeforeDeadline;
             Priority = priority;
         }
     }

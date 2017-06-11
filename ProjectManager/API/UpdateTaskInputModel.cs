@@ -10,12 +10,15 @@ namespace ProjectManager.API
         public DateTime? Deadline { get; set; }
         [Required]
         public string Priority { get; set; }
+        [Required]
+        public int SendEmailNumberOfDaysBeforeDeadline { get; set; }
 
-        public UpdateTaskInputModel(string title, DateTime? deadline, string priority)
+        public UpdateTaskInputModel(string title, DateTime? deadline, string priority, int sendEmailNumberOfDaysBeforeDeadline)
         {
             Title = title;
             Deadline = deadline;
             Priority = priority;
+            SendEmailNumberOfDaysBeforeDeadline = sendEmailNumberOfDaysBeforeDeadline;
         }
     }
 }

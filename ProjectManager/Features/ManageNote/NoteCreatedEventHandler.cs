@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using ProjectManager.Domain;
 using Task = System.Threading.Tasks.Task;
 
-namespace ProjectManager.Features.AddNote
+namespace ProjectManager.Features.ManageNote
 {
     public class NoteCreatedEventHandler
     {

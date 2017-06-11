@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ProjectManager.Features.ViewNote;
 
-namespace ProjectManager.Features.AddNote
+namespace ProjectManager.Features.ManageNote
 {
     public class NoteRewrittenEventHandler
     {

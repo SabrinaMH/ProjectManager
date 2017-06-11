@@ -44,7 +44,7 @@ namespace ProjectManager.API
         public async Task<HttpResponseMessage> Post([FromBody] AddTaskInputModel model)
         {
             var id = Guid.NewGuid();
-            var task = new Domain.Task(id, model.ProjectId, model.Title, model.Priority, model.Deadline);
+            var task = new Domain.Task(id, model.ProjectId, model.Title, model.Priority, model.Deadline, model.SendEmailNumberOfDaysBeforeDeadline);
             await _taskRepository.SaveAsync(task);
             return Request.CreateResponse(HttpStatusCode.Created, id);
         }
@@ -53,7 +53,7 @@ namespace ProjectManager.API
         public async Task<HttpResponseMessage> Post(Guid id, [FromBody] UpdateTaskInputModel model)
         {
             var task = _taskRepository.Get(id);
-            task.Update(model.Title, model.Priority, model.Deadline);
+            task.Update(model.Title, model.Priority, model.Deadline, model.SendEmailNumberOfDaysBeforeDeadline);
             await _taskRepository.SaveAsync(task);
             return Request.CreateResponse(HttpStatusCode.OK);
         }

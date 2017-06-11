@@ -78,7 +78,7 @@ namespace Test
             var projectInputModel = _fixture.Create<AddProjectInputModel>();
             var projectId = await PostProjectAsync(projectInputModel);
 
-            var response = await _httpClient.GetAsync(_projectEndpoint + projectId);
+            var response = await _httpClient.GetAsync(string.Format("{0}/{1}", _projectEndpoint, projectId));
             var content = await response.Content.ReadAsStringAsync();
             var projectViewModel = JsonConvert.DeserializeObject<ProjectViewModel>(content);
             projectViewModel.Id.Should().Be(projectId);

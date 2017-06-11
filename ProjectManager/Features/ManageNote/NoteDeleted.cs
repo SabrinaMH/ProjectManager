@@ -1,7 +1,7 @@
 using System;
 using ProjectManager.Infrastructure;
 
-namespace ProjectManager.Features.AddNote
+namespace ProjectManager.Features.ManageNote
 {
     public class NoteDeleted : Event
     {

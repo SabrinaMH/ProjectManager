@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ProjectManager.Features.AddNote;
+using ProjectManager.Features.ManageNote;
 using ProjectManager.Infrastructure;
 
 namespace ProjectManager.Domain

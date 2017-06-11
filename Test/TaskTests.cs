@@ -150,6 +150,8 @@ namespace Test
             taskViewModel.Priority.Should().Be(updateTaskInputModel.Priority);
             taskViewModel.Id.Should().Be(taskId);
             taskViewModel.Title.Should().Be(updateTaskInputModel.Title);
+            taskViewModel.SendEmailNumberOfDaysBeforeDeadline.Should()
+                .Be(updateTaskInputModel.SendEmailNumberOfDaysBeforeDeadline);
         }
 
         private async Task<Guid> PostTaskAsync(AddTaskInputModel inputModel)

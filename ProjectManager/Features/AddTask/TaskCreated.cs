@@ -9,15 +9,17 @@ namespace ProjectManager.Features.AddTask
         public string Title { get; private set; }
         public string Priority { get; }
         public DateTime? Deadline { get; set; }
+        public int SendEmailNumberOfDaysBeforeDeadline { get; }
         public Guid ProjectId { get; set; }
 
-        public TaskCreated(Guid id, Guid projectId, string title, string priority, DateTime? deadline)
+        public TaskCreated(Guid id, Guid projectId, string title, string priority, DateTime? deadline, int sendEmailNumberOfDaysBeforeDeadline)
         {
             Id = id;
             ProjectId = projectId;
             Title = title;
             Priority = priority;
             Deadline = deadline;
+            SendEmailNumberOfDaysBeforeDeadline = sendEmailNumberOfDaysBeforeDeadline;
         }
     }
 }

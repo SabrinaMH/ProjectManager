@@ -12,5 +12,8 @@ namespace ProjectManager.API
         public DateTime? Deadline { get; set; }
         [Required]
         public string Priority { get; set; }
+
+        [Required]
+        public int SendEmailNumberOfDaysBeforeDeadline { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ProjectManager.Features.AddNote;
+using ProjectManager.Features.ManageNote;
 
 namespace ProjectManager.Infrastructure
 {
