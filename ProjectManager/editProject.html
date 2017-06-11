@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Project Manager</title>
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/date-da-DK.js"></script>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body style="margin:2%">
+<header>
+    <h3>Edit Project</h3>
+</header>
+    <form id="editProjectForm" style="margin:2%">
+        <div>
+            <label for="title" style="display: block; margin-bottom: 20px">
+                Title:
+                <input type="text" id="title" name="title" />
+            </label>
+            <label style="display: block; margin-bottom: 20px">
+                Deadline:
+                <input type="date" id="deadlineDate" name="deadline">
+                <input type="time" id="deadlineTime" />
+            </label>
+        </div>
+        <input type="submit" value="Edit Project">
+    </form>
+    <script type="text/javascript" src="src/editProject.js"></script>
+</body>
+</html>

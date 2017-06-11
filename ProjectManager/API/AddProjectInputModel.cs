@@ -5,7 +5,7 @@ using Microsoft.Build.Framework;
 namespace ProjectManager.API
 {
     [DataContract]
-    public class ProjectInputModel
+    public class AddProjectInputModel
     {
         [DataMember]
         [Required]

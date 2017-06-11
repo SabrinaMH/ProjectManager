@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -45,6 +46,25 @@ namespace ProjectManager.Persistence
             {
                 await _eventBus.PublishAsync(@event);
             }
+        }
+
+        public Project Get(Guid id)
+        {
+            Project project = null;
+            foreach (var file in Directory.GetFiles(_storageFolder, "project-*"))
+            {
+                var fileContent = File.ReadAllText(file);
+                var projectState = JsonConvert.DeserializeObject<ProjectState>(fileContent);
+                if (projectState.Id.Equals(id))
+                {
+                    project = new Project(projectState);
+                }
+            }
+
+            if (project != null)
+                return project;
+            else
+                throw new NotFoundException(id.ToString());
         }
     }
 }

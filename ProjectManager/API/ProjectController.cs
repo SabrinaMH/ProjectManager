@@ -12,7 +12,7 @@ namespace ProjectManager.API
     [RoutePrefix("project")]
     public class ProjectController : ApiController
     {
-        private ProjectRepository _projectRepository;
+        private readonly ProjectRepository _projectRepository;
 
         public ProjectController(ProjectRepository projectRepository)
         {
@@ -38,12 +38,21 @@ namespace ProjectManager.API
         }
 
         [Route("")]
-        public async Task<HttpResponseMessage> Post([FromBody] ProjectInputModel model)
+        public async Task<HttpResponseMessage> Post([FromBody] AddProjectInputModel model)
         {
             var id = Guid.NewGuid();
             var project = new Project(id, model.Title, model.Deadline);
             await _projectRepository.SaveAsync(project);
             return Request.CreateResponse(HttpStatusCode.Created, id);
-        } 
+        }
+
+        [Route("{id}")]
+        public async Task<HttpResponseMessage> Post(Guid id, [FromBody] UpdateProjectInputModel model)
+        {
+            var project = _projectRepository.Get(id);
+            project.Update(model.Title, model.Deadline);
+            await _projectRepository.SaveAsync(project);
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }

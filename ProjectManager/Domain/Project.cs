@@ -29,6 +29,12 @@ namespace ProjectManager.Domain
             State = state;
         }
 
+        public void Update(string title, DateTime? deadline)
+        {
+            State.Title = title;
+            State.Deadline = deadline;
+        }
+
         protected bool Equals(Project other)
         {
             return Id.Equals(other.Id);
@@ -51,8 +57,8 @@ namespace ProjectManager.Domain
     public class ProjectState
     {
         public Guid Id { get; }
-        public string Title { get; }
-        public DateTime? Deadline { get; }
+        public string Title { get; set; }
+        public DateTime? Deadline { get; set; }
 
         public ProjectState(Guid id, string title, DateTime? deadline)
         {

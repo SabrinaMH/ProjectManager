@@ -198,6 +198,19 @@ function appendToTaskView(id) {
         });
 }
 
+function refreshProject(id) {
+    get('/project/' + id)
+        .then((project) => {
+            var projectEntry = document.querySelector("[data-id='" + id + "']");
+            projectEntry.children[0].textContent = project.Title;
+
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+
 function refreshTask(id) {
     get('/task/' + id)
         .then((task) => {
