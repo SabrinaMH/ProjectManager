@@ -17,7 +17,7 @@ namespace ProjectManager.Features.AddProject
 
         public async Task Handle(ProjectCreated @event)
         {
-            var projectViewModel = new ProjectViewModel(@event.Id, @event.Title, @event.Deadline);
+            var projectViewModel = new ProjectViewModel(@event.Id, @event.Title);
             var serializedViewModel = JsonConvert.SerializeObject(projectViewModel);
             var fileName = string.Concat("projectViewModel-", @event.Id + ".json");
             var path = Path.Combine(_storageFolder, fileName);

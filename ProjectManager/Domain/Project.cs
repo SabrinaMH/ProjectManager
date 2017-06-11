@@ -13,13 +13,13 @@ namespace ProjectManager.Domain
         public ProjectState State { get; }
         public ReadOnlyCollection<Event> Events => _events.AsReadOnly();
 
-        public Project(Guid id, string title, DateTime? deadline)
+        public Project(Guid id, string title)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException(nameof(title));
             
-            State = new ProjectState(id, title, deadline);
-            var projectCreated = new ProjectCreated(id, title, deadline);
+            State = new ProjectState(id, title);
+            var projectCreated = new ProjectCreated(id, title);
             _events.Add(projectCreated);
         }
 
@@ -29,10 +29,9 @@ namespace ProjectManager.Domain
             State = state;
         }
 
-        public void Update(string title, DateTime? deadline)
+        public void Update(string title)
         {
             State.Title = title;
-            State.Deadline = deadline;
         }
 
         protected bool Equals(Project other)
@@ -58,13 +57,11 @@ namespace ProjectManager.Domain
     {
         public Guid Id { get; }
         public string Title { get; set; }
-        public DateTime? Deadline { get; set; }
 
-        public ProjectState(Guid id, string title, DateTime? deadline)
+        public ProjectState(Guid id, string title)
         {
             Id = id;
             Title = title;
-            Deadline = deadline;
         }
     }
 }

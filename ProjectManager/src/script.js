@@ -13,8 +13,7 @@ function get(url) {
 
 $('#addProjectForm').submit(function () {
     var title = $("#projectTitle").val().toString();
-    var deadline = $("#addProjectForm #projectDeadline").val();
-    var formData = { Title: title, Deadline: deadline }
+    var formData = { Title: title }
     var formURL = $('#addProjectForm').attr("action");
     $.ajax(
         {

@@ -7,12 +7,10 @@ namespace ProjectManager.API
     {
         [Required]
         public string Title { get; set; }
-        public DateTime? Deadline { get; set; }
 
-        public UpdateProjectInputModel(string title, DateTime? deadline)
+        public UpdateProjectInputModel(string title)
         {
             Title = title;
-            Deadline = deadline;
         }
     }
 }
